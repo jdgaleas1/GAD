@@ -48,15 +48,15 @@ class CustomDrawer extends StatelessWidget {
             ],
           ),
           ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Home'),
+            leading: Icon(Icons.fact_check),
+            title: Text('Inventario Nuevo'),
             onTap: () {
               onItemTapped(0);
               Navigator.pop(context);
             },
           ),
           ListTile(
-            leading: Icon(Icons.car_rental_outlined),
+            leading: Icon(Icons.visibility ),
             title: const Text('Reservas Hechas'),
             onTap: () {
               onItemTapped(1);

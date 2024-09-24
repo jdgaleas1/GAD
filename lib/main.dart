@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gad/Model/Temas-Estados.dart';
 import 'package:gad/View/Drawer.dart';
+import 'package:gad/View/home-inventario%20PCs.dart';
 import 'package:gad/firebase_options.dart';
 import 'package:provider/provider.dart';
 
@@ -56,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     // Inicialización de los contenidos de las pestañas
     _content = [
-      Center(child: Text('Página principal')),
+      PCsHome (),
       Center(child: Text('Reservas Hechas')),
     ];
   }
@@ -74,26 +75,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title), // Usar el título pasado al widget
+        title: Text(widget.title), 
       ),
       body: Center(
         child: _content[_selectedIndex],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.car_rental_outlined),
-            label: 'Reservas Hechas',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Color.fromARGB(255, 110, 172, 218),
-        unselectedItemColor: Colors.grey,
-        onTap: _onItemTapped,
       ),
       drawer: CustomDrawer(
         onItemTapped: _onItemTapped,
