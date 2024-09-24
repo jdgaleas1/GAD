@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "127594592035",
+    "project_id": "gadcotopaxi-4375a",
+    "storage_bucket": "gadcotopaxi-4375a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127594592035:android:c328564cf47594e6a73e96",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARwlYdk2aVuXv3jYvLodUZUBCsiLXNxD8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
