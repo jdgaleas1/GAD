@@ -68,7 +68,12 @@ class _AgregarPCsState extends State<AgregarPCs> {
   List<String> estadoPCOpciones = ['Buena', 'Regular', 'Mala'];
 
   _guardarPC() async {
-    // Funcionalidad para guardar la PC
+    if (_formKey.currentState!.validate()) {
+      // Aquí puedes implementar la lógica para guardar la información
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Guardado exitosamente')),
+      );
+    }
   }
 
   @override
