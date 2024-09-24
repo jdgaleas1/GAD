@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gad/View/Inventario-PCS.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:excel/excel.dart';
 
@@ -12,7 +11,6 @@ class PCsHome extends StatefulWidget {
 }
 
 class _PCsHomeState extends State<PCsHome> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> _refreshAutos() async {
     setState(() {});
@@ -33,29 +31,6 @@ class _PCsHomeState extends State<PCsHome> {
         // Asumimos que los datos están en la primera hoja y en un formato específico
         var sheet = excel.tables[excel.tables.keys.first]!.rows;
 
-        // Iterar sobre las filas del Excel
-        for (var row in sheet) {
-          if (row.isNotEmpty) {
-            await _firestore.collection('pcs').add({
-              'marca_temporal': row[0]?.value,
-              'unidad': row[1]?.value,
-              'ip': row[2]?.value,
-              'nombre_pc': row[3]?.value,
-              'nombre_funcionario': row[4]?.value,
-              'puesto_ocupa': row[5]?.value,
-              'red_conectada': row[6]?.value,
-              'nombre_red': row[7]?.value,
-              'dns1': row[8]?.value,
-              'dns2': row[9]?.value,
-              'sistema_operativo': row[10]?.value,
-              'maquinas_todo_en_uno': row[11]?.value,
-              'caracteristicas_pcs': row[12]?.value,
-              'laptop': row[13]?.value,
-              'codigo_act_fijos': row[14]?.value,
-              'estado_computadora': row[15]?.value,
-            });
-          }
-        }
 
         // Mostrar un mensaje de éxito
         ScaffoldMessenger.of(context).showSnackBar(

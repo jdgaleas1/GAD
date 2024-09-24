@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gad/Model/Inventario-PC-model.dart'; // Asegúrate de importar tu modelo
+import 'package:gad/Service/Inventario-PC-Servicio.dart'; // Asegúrate de importar el servicio
 
 class AgregarPCs extends StatefulWidget {
   const AgregarPCs({super.key});
@@ -31,34 +33,10 @@ class _AgregarPCsState extends State<AgregarPCs> {
   String? estadoPCSeleccionado;
 
   // Listas para Dropdowns
-  List<String> unidades = [
-    'Fiscalización',
-    'Obras Públicas',
-    'Contabilidad',
-    'Inventario y Activos Fijos',
-    'Unidad de Presupuesto',
-    'Gestión Financiera',
-    'Unidad de Comunicación',
-    'Comunicación-La Radio',
-    'Talleres',
-    'Contabilidad-Patronato',
-    'Salud Ocupacional',
-    'Unidad Administrativas',
-    'Planificación',
-    'Bodegas',
-    'Riego y Drenaje',
-    'Tesorería',
-    'Secretaría General',
-    'Viceprefectura',
-    'Archivo',
-    'Jurídico',
-    'Prefectura',
-    'Fomento Productivo',
-    'Casa de Exposiciones',
-    'Compras Públicas',
-    'Talento Humano',
-    'Gestión de Riesgos',
-    'La Maná',
+  List<String> unidades = ['Fiscalización', 'Obras Públicas', 'Contabilidad', 'Inventario y Activos Fijos', 'Unidad de Presupuesto',
+    'Gestión Financiera', 'Unidad de Comunicación', 'Comunicación-La Radio', 'Talleres', 'Contabilidad-Patronato', 'Salud Ocupacional',
+    'Unidad Administrativas', 'Planificación', 'Bodegas', 'Riego y Drenaje', 'Tesorería', 'Secretaría General', 'Viceprefectura', 'Archivo',
+    'Jurídico', 'Prefectura', 'Fomento Productivo', 'Casa de Exposiciones', 'Compras Públicas', 'Talento Humano', 'Gestión de Riesgos', 'La Maná',
   ];
 
   List<String> redConectadas = ['LAN(ETHERNET)', 'WAN(Wifi)'];
@@ -67,12 +45,43 @@ class _AgregarPCsState extends State<AgregarPCs> {
   List<String> laptopOpciones = ['Si', 'No'];
   List<String> estadoPCOpciones = ['Buena', 'Regular', 'Mala'];
 
+  // Instancia del servicio para guardar los datos
+  final InventarioService _inventarioService = InventarioService();
+
+  // Método para guardar los datos en la base de datos
   _guardarPC() async {
     if (_formKey.currentState!.validate()) {
-      // Aquí puedes implementar la lógica para guardar la información
+      // Crear una instancia de InventarioPCs con los datos ingresados
+      InventarioPCs nuevaPC = InventarioPCs(
+        idPc: '',  // El ID se generará automáticamente
+        marcaTemporal: marcacontroller.text,
+        unidad: unidadSeleccionada!,
+        ip: IPcontroller.text,
+        nombreDeLaPc: NombrePCcontroller.text,
+        nombreDelFuncionario: NombreFuncionariocontroller.text,
+        puestoQueOcupa: puestoFuncionariocontroller.text,
+        redConectada: redConectadaSeleccionada!,
+        nombreDeRed: nombreRedSeleccionada!,
+        dns1: dns1controller.text,
+        dns2: dns2controller.text,
+        sistemaOperativo: sistemaOperativocontroller.text,
+        maquinaTodoEnUno: maquinaTodoEnUnoSeleccionada!,
+        caracteristicas: CaracteristicasController.text,
+        laptop: laptopSeleccionada!,
+        codigoActFijos: codigoController.text,
+        estadoDeComputadora: estadoPCSeleccionado!,
+      );
+
+      // Guardar los datos en Firestore usando el servicio
+      await _inventarioService.guardarInventario(nuevaPC);
+
+      // Mostrar mensaje de éxito
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Guardado exitosamente')),
       );
+
+      // Resetear el formulario o navegar de vuelta
+      Navigator.pop(context, true);
     }
   }
 
@@ -136,6 +145,30 @@ class _AgregarPCsState extends State<AgregarPCs> {
               ),
               const SizedBox(height: 10),
 
+              TextFormField(
+                controller: NombreFuncionariocontroller,
+                decoration: const InputDecoration(labelText: 'Nombre del Fncionario'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor ingrese el Nombre del Funcionario';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 10),
+
+
+              TextFormField(
+                controller: puestoFuncionariocontroller,
+                decoration: const InputDecoration(labelText: 'Puesto que Ocupa'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor ingrese el Puesto que Ocupa';
+                  }
+                  return null;
+                },
+              ),
+            const SizedBox(height: 10),
               TextFormField(
                 controller: IPcontroller,
                 decoration: const InputDecoration(labelText: 'IP'),
@@ -250,6 +283,18 @@ class _AgregarPCsState extends State<AgregarPCs> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor seleccione si es Maquina Todo en Uno';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 10),
+
+              TextFormField(
+                controller: CaracteristicasController,
+                decoration: const InputDecoration(labelText: 'Caracteristicas PC'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor ingrese las Caracteristicas de la PCs';
                   }
                   return null;
                 },
