@@ -18,7 +18,7 @@ Future<void> main() async {
           create: (_) => ThemeProvider(AppThemes.lightTheme),
         ),
       ],
-      child:  MyApp(),
+      child: MyApp(),
     ),
   );
 }
@@ -34,11 +34,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Alquiler',
       theme: themeProvider.getTheme(),
-      //  home:  LoginPage(), 
+      home: MyHomePage(title: 'Inventario PCs'), // Define la home aquí
       debugShowCheckedModeBanner: false,
     );
   }
 }
+
 class MyHomePage extends StatefulWidget {
    MyHomePage({super.key, required this.title});
   final String title;
@@ -53,9 +54,12 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-
+    // Inicialización de los contenidos de las pestañas
+    _content = [
+      Center(child: Text('Página principal')),
+      Center(child: Text('Reservas Hechas')),
+    ];
   }
-
 
   void _onItemTapped(int index) {
     if (index < _content.length) {
@@ -70,13 +74,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title:  Text("Inventario PCs"),
+        title: Text(widget.title), // Usar el título pasado al widget
       ),
       body: Center(
         child: _content[_selectedIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items:  <BottomNavigationBarItem>[
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
@@ -87,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor:  Color.fromARGB(255, 110, 172, 218),
+        selectedItemColor: Color.fromARGB(255, 110, 172, 218),
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
       ),

@@ -22,7 +22,7 @@ class CustomDrawer extends StatelessWidget {
           DrawerHeader(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/car_drawer.jpg'),
+                image: AssetImage('assets/images/gad_drawer.png'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -39,7 +39,7 @@ class CustomDrawer extends StatelessWidget {
               ),
                 const SizedBox(height: 10),          
               Text(
-                'Perfectura',
+                'GAD EC',
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
