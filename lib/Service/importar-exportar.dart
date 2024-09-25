@@ -65,7 +65,7 @@ class ImportarExportar {
 
 Future<void> exportarDatosExcel() async {
   // Recuperar los datos de Firestore
-  List<InventarioPCs> inventarioData = await _inventarioService.obtenerInventarios();
+  List<InventarioPCs> inventarioData = await _inventarioService.obtenerInventario();
 
   // Crear un archivo Excel
   var excel = Excel.createExcel();
