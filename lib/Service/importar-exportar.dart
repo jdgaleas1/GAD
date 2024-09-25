@@ -69,83 +69,73 @@ class ImportarExportar {
   }
 
   Future<void> exportarDatosExcel() async {
-    // Verificar permisos de almacenamiento
-    if (await _verificarPermisoAlmacenamiento()) {
-      // Recuperar los datos de Firestore
-      List<InventarioPCs> inventarioData =
-          await _inventarioService.obtenerInventario();
+    // Recuperar los datos de Firestore
+    List<InventarioPCs> inventarioData =
+        await _inventarioService.obtenerInventario();
 
-      // Crear un archivo Excel
-      var excel = Excel.createExcel();
-      Sheet sheetObject = excel['Sheet1'];
+    // Crear un archivo Excel
+    var excel = Excel.createExcel();
+    Sheet sheetObject = excel['Sheet1'];
 
-      // Añadir la primera fila con los títulos de las columnas
+    // Añadir la primera fila con los títulos de las columnas
+    sheetObject.appendRow([
+      "#",
+      'Marca temporal',
+      'Unidad',
+      'IP',
+      'NOMBRE DE LA PC',
+      'NOMBRE DEL FUNCIONARIO',
+      'PUESTO QUE OCUPA',
+      'RED CONECTADA',
+      'NOMBRE DE RED',
+      'DNS-1',
+      'DNS-2',
+      'SISTEMA OPERATIVO',
+      'MAQUINA TODO EN UNO',
+      'CARACTERISTICAS',
+      'LAPTOP',
+      'CODIGO ACT FIJOS',
+      'ESTADO DE COMPUTADORA'
+    ]);
+
+    // Llenar las filas con los datos del inventario
+    for (var inventario in inventarioData) {
       sheetObject.appendRow([
-        '#'
-        'Marca temporal',
-        'Unidad',
-        'IP',
-        'NOMBRE DE LA PC',
-        'NOMBRE DEL FUNCIONARIO',
-        'PUESTO QUE OCUPA',
-        'RED CONECTADA',
-        'NOMBRE DE RED',
-        'DNS-1',
-        'DNS-2',
-        'SISTEMA OPERATIVO',
-        'MAQUINA TODO EN UNO',
-        'CARACTERISTICAS',
-        'LAPTOP',
-        'CODIGO ACT FIJOS',
-        'ESTADO DE COMPUTADORA'
+        inventario.idPc ?? '',
+        inventario.marcaTemporal ?? '',
+        inventario.unidad ?? '',
+        inventario.ip ?? '',
+        inventario.nombreDeLaPc ?? '',
+        inventario.nombreDelFuncionario ?? '',
+        inventario.puestoQueOcupa ?? '',
+        inventario.redConectada ?? '',
+        inventario.nombreDeRed ?? '',
+        inventario.dns1 ?? '',
+        inventario.dns2 ?? '',
+        inventario.sistemaOperativo ?? '',
+        inventario.maquinaTodoEnUno ?? '',
+        inventario.caracteristicas ?? '',
+        inventario.laptop ?? '',
+        inventario.codigoActFijos ?? '',
+        inventario.estadoDeComputadora ?? '',
       ]);
-
-      // Llenar las filas con los datos del inventario
-      for (var inventario in inventarioData) {
-        sheetObject.appendRow([
-          inventario.idPc ?? '',
-          inventario.marcaTemporal ?? '', // Maneja nulos con ''
-          inventario.unidad ?? '',
-          inventario.ip ?? '',
-          inventario.nombreDeLaPc ?? '',
-          inventario.nombreDelFuncionario ?? '',
-          inventario.puestoQueOcupa ?? '',
-          inventario.redConectada ?? '',
-          inventario.nombreDeRed ?? '',
-          inventario.dns1 ?? '',
-          inventario.dns2 ?? '',
-          inventario.sistemaOperativo ?? '',
-          inventario.maquinaTodoEnUno ?? '',
-          inventario.caracteristicas ?? '',
-          inventario.laptop ?? '',
-          inventario.codigoActFijos ?? '',
-          inventario.estadoDeComputadora ?? '',
-        ]);
-      }
-
-      // Obtener el directorio de Descargas
-      Directory? downloadsDirectory = await getExternalStorageDirectory();
-
-      if (downloadsDirectory != null) {
-        String filePath = '${downloadsDirectory.path}/InventarioPCs.xlsx';
-
-        // Guardar el archivo Excel
-        File(filePath)
-          ..createSync(recursive: true)
-          ..writeAsBytesSync(excel.encode()!);
-
-        print('Archivo Excel exportado: $filePath');
-      } else {
-        print('No se pudo obtener el directorio de Descargas.');
-      }
-    } else {
-      print('Permiso de almacenamiento denegado.');
     }
-  }
 
-  // Método para verificar y solicitar permiso de almacenamiento
-  Future<bool> _verificarPermisoAlmacenamiento() async {
-    var status = await Permission.storage.request();
-    return status.isGranted;
+    // Obtener el directorio de Descargas
+    Directory? downloadsDirectory =
+        await getExternalStorageDirectory(); // Cambiado a un directorio accesible
+
+    if (downloadsDirectory != null) {
+      String filePath = '${downloadsDirectory.path}/InventarioPCs.xlsx';
+
+      // Guardar el archivo Excel
+      File(filePath)
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(excel.encode()!);
+
+      print('Archivo Excel exportado: $filePath');
+    } else {
+      print('No se pudo obtener el directorio de Descargas.');
+    }
   }
 }
