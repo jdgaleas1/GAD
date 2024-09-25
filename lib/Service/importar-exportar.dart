@@ -42,23 +42,23 @@ class ImportarExportar {
 
           // Procesar la fila si no está vacía
           InventarioPCs nuevaPC = InventarioPCs(
-            idPc: '', // El ID se generará automáticamente
-            marcaTemporal: row[0]?.value.toString() ?? '',
-            unidad: row[1]?.value.toString() ?? '',
-            ip: row[2]?.value.toString() ?? '',
-            nombreDeLaPc: row[3]?.value.toString() ?? '',
-            nombreDelFuncionario: row[4]?.value.toString() ?? '',
-            puestoQueOcupa: row[5]?.value.toString() ?? '',
-            redConectada: row[6]?.value.toString() ?? '',
-            nombreDeRed: row[7]?.value.toString() ?? '',
-            dns1: row[8]?.value.toString() ?? '',
-            dns2: row[9]?.value.toString() ?? '',
-            sistemaOperativo: row[10]?.value.toString() ?? '',
-            maquinaTodoEnUno: row[11]?.value.toString() ?? '',
-            caracteristicas: row[12]?.value.toString() ?? '',
-            laptop: row[13]?.value.toString() ?? '',
-            codigoActFijos: row[14]?.value.toString() ?? '',
-            estadoDeComputadora: row[15]?.value.toString() ?? '',
+            idPc: row[0]?.value.toString() ?? '', // El ID se generará automáticamente
+            marcaTemporal: row[1]?.value.toString() ?? '',
+            unidad: row[2]?.value.toString() ?? '',
+            ip: row[3]?.value.toString() ?? '',
+            nombreDeLaPc: row[4]?.value.toString() ?? '',
+            nombreDelFuncionario: row[5]?.value.toString() ?? '',
+            puestoQueOcupa: row[6]?.value.toString() ?? '',
+            redConectada: row[7]?.value.toString() ?? '',
+            nombreDeRed: row[8]?.value.toString() ?? '',
+            dns1: row[9]?.value.toString() ?? '',
+            dns2: row[10]?.value.toString() ?? '',
+            sistemaOperativo: row[11]?.value.toString() ?? '',
+            maquinaTodoEnUno: row[12]?.value.toString() ?? '',
+            caracteristicas: row[13]?.value.toString() ?? '',
+            laptop: row[14]?.value.toString() ?? '',
+            codigoActFijos: row[15]?.value.toString() ?? '',
+            estadoDeComputadora: row[16]?.value.toString() ?? '',
           );
 
           // Guardar cada fila en Firestore
