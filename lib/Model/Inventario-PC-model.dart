@@ -1,5 +1,14 @@
+// To parse this JSON data, do
+//
+//     final inventarioPCs = inventarioPCsFromJson(jsonString);
+
+import 'dart:convert';
+
+
+String inventarioPCsToJson(InventarioPCs data) => json.encode(data.toJson());
+
 class InventarioPCs {
-  String idPc;
+  String? idPc;
   String marcaTemporal;
   String unidad;
   String ip;
