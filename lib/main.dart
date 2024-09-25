@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gad/Model/Temas-Estados.dart';
+import 'package:gad/Service/importar-exportar.dart';
 import 'package:gad/View/Drawer.dart';
 import 'package:gad/View/home-inventario%20PCs.dart';
 import 'package:gad/firebase_options.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return MaterialApp(
-      title: 'Alquiler',
+      title: 'Inventario',
       theme: themeProvider.getTheme(),
       home: MyHomePage(title: 'Inventario PCs'), // Define la home aquí
       debugShowCheckedModeBanner: false,
@@ -51,6 +52,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late List<Widget> _content;
   int _selectedIndex = 0;
+
+   final ImportarExportar _importarExportar = ImportarExportar();
 
   @override
   void initState() {
@@ -70,6 +73,22 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+    // Define la función seleccionarArchivoExcel
+  void seleccionarArchivoExcel() async {
+    await _importarExportar.seleccionarArchivoExcel();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Datos del Excel subidos exitosamente')),
+    );
+  }
+
+  // Define la función exportarDatos
+  void exportarDatos() async {
+    await _importarExportar.exportarDatosExcel();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Datos exportados exitosamente')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,6 +101,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       drawer: CustomDrawer(
         onItemTapped: _onItemTapped,
+        seleccionarArchivoExcel: seleccionarArchivoExcel, // Pasa la función de importar
+        exportarDatos: exportarDatos, // Pasa la función de exportar
       ),
     );
   }

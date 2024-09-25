@@ -34,5 +34,26 @@ class InventarioService {
     }
   }
 
+    Future<List<InventarioPCs>> obtenerInventarios() async {
+  try {
+    QuerySnapshot snapshot = await _firestore.collection(collectionName).get();
+    
+    return snapshot.docs.map((doc) {
+      final data = doc.data() as Map<String, dynamic>?;
+      if (data != null) {
+        return InventarioPCs.fromJson(data);
+      } else {
+        throw Exception('Documento sin datos válidos: ${doc.id}');
+      }
+    }).toList();
+  } catch (e) {
+    print('Error al obtener inventarios: $e');
+    return []; // Devuelve una lista vacía en caso de error
+  }
+}
+
+
+
+
   
 }

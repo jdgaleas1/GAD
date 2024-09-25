@@ -5,10 +5,14 @@ import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatelessWidget {
   final Function(int) onItemTapped;
+  final VoidCallback seleccionarArchivoExcel; // Añadir la función de importar
+  final VoidCallback exportarDatos; // Añadir la función de exportar
 
   CustomDrawer({
     super.key,
     required this.onItemTapped,
+        required this.seleccionarArchivoExcel, // Recibe la función de importar
+    required this.exportarDatos, // Recibe la función de exportar
   });
 
   @override
@@ -55,14 +59,29 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
-          ListTile(
-            leading: Icon(Icons.visibility ),
-            title: const Text('Reservas Hechas'),
-            onTap: () {
-              onItemTapped(1);
-              Navigator.pop(context);
-            },
-                  ),
+          // El nuevo ExpansionTile para Importar/Exportar
+          ExpansionTile(
+            leading: Icon(Icons.import_export),
+            title: Text('Importar/Exportar'),
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.upload_file),
+                title: Text('Importar'),
+                onTap: () {
+                  seleccionarArchivoExcel(); // Llama a la función de importar
+                  Navigator.pop(context); // Cierra el drawer
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.download),
+                title: Text('Exportar'),
+                onTap: () {
+                exportarDatos(); // 
+                  Navigator.pop(context); // Cierra el drawer
+                },
+              ),
+            ],
+          ),
                   
           ExpansionTile(
             leading: Icon(Icons.settings),
