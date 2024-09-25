@@ -3,39 +3,25 @@ import 'package:gad/Model/Inventario-PC-model.dart';
 
 class InventarioService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String collectionName = "Inventario-Pcss";
-
-  // Este método obtiene el siguiente ID disponible para un documento
-  Future<String> _generarId() async {
-    // Obtén todos los documentos de la colección
-    QuerySnapshot querySnapshot =
-        await _firestore.collection(collectionName).get();
-
-    // Generar el siguiente ID basado en el número de documentos
-    int nuevoId = querySnapshot.docs.length + 1;
-    return "InventarioPC$nuevoId";
-  }
+  final String collectionName = "Inventario-PCs";
 
   // Método para guardar un inventario en Firestore
-  Future<void> guardarInventario(InventarioPCs inventario) async {
-    try {
-      // Generar el ID del documento
-      String documentId = await _generarId();
+Future<void> guardarInventario(InventarioPCs inventario) async {
+  try {
+    // Convertir el objeto InventarioPCs a JSON
+    Map<String, dynamic> inventarioData = inventario.toJson();
 
-      // Convertir el objeto InventarioPCs a JSON
-      Map<String, dynamic> inventarioData = inventario.toJson();
+    // Guardar el inventario en Firestore sin especificar el ID (se generará automáticamente)
+    await _firestore
+        .collection(collectionName)
+        .add(inventarioData);
 
-      // Guardar el inventario en Firestore con el ID generado
-      await _firestore
-          .collection(collectionName)
-          .doc(documentId)
-          .set(inventarioData);
-
-      print("Inventario guardado con éxito con el ID: $documentId");
-    } catch (e) {
-      print("Error al guardar el inventario: $e");
-    }
+    print("Inventario guardado con éxito");
+  } catch (e) {
+    print("Error al guardar el inventario: $e");
   }
+}
+
 
   Future<List<InventarioPCs>> obtenerInventario() async {
     try {

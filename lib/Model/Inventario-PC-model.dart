@@ -8,7 +8,7 @@ import 'dart:convert';
 String inventarioPCsToJson(InventarioPCs data) => json.encode(data.toJson());
 
 class InventarioPCs {
-  String? idPc;
+  String idPc;
   String marcaTemporal;
   String unidad;
   String ip;

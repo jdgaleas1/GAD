@@ -15,7 +15,7 @@ class _PCsHomeState extends State<PCsHome> {
   Future<void> _refreshPCs() async {
     setState(() {});
   }
-  final InventarioService _inventarioService = InventarioService(); // Instancia del servicio
+  //final InventarioService _inventarioService = InventarioService(); // Instancia del servicio
   final InventarioService _firestoreService = InventarioService(); // Instancia de tu servicio
 
   @override
