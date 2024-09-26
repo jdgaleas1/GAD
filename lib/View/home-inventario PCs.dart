@@ -1,73 +1,121 @@
 import 'package:flutter/material.dart';
 import 'package:gad/View/Inventario-PCS.dart';
-import 'package:gad/Service/Inventario-PC-Servicio.dart'; // Servicio para acceder a Firestore
-import 'package:gad/Model/Inventario-PC-model.dart'; // Modelo InventarioPCs
+import 'package:gad/Service/Inventario-PC-Servicio.dart';
+import 'package:gad/Model/Inventario-PC-model.dart';
 
 class PCsHome extends StatefulWidget {
   const PCsHome({super.key});
-
   @override
   State<PCsHome> createState() => _PCsHomeState();
 }
-
 class _PCsHomeState extends State<PCsHome> {
-  Future<List<InventarioPCs>>?
-      _futureInventarios; // Variable para almacenar el Future
+  Future<List<InventarioPCs>>? _futureInventarios;
+  bool _isEditActive = false; // Variable para el Switch de edición
+  bool _isMarkingActive = false; // Variable para el Switch de señalar filas
 
   @override
   void initState() {
     super.initState();
-    _futureInventarios =
-        _inventarioService.obtenerInventario(); // Cargar datos al iniciar
+    _futureInventarios = _inventarioService.obtenerInventario();
   }
 
   Future<void> _refreshPCs() async {
     setState(() {
-      _futureInventarios =
-          _inventarioService.obtenerInventario(); // Refrescar los datos
+      _futureInventarios = _inventarioService.obtenerInventario();
     });
   }
 
-  final InventarioService _inventarioService =
-      InventarioService(); // Instancia del servicio
+  final InventarioService _inventarioService = InventarioService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inventario PCs'),
+        title: const Center(
+          child: Text('Inventario PCs'),
+        ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.update),
-            onPressed: _refreshPCs, // Correcta referencia a la función
+          PopupMenuButton<String>(
+            onSelected: (String result) {
+              if (result == 'refrescar') {
+                _refreshPCs();
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'refrescar',
+                child: ListTile(
+                  leading: Icon(Icons.refresh),
+                  title: Text('Refrescar lista'),
+                ),
+              ),
+              PopupMenuItem<String>(
+                // Opción para activar/desactivar la edición con un switch
+                value: 'edicion',
+                child: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                    return ListTile(
+                      leading: Icon(Icons.edit),
+                      title: const Text('Edición activa'),
+                      trailing: Switch(
+                        value: _isEditActive,
+                        onChanged: (bool newValue) {
+                          setState(() {
+                            _isEditActive = newValue;
+                          });
+                          Navigator.pop(context); // Cerrar el menú después de cambiar
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+              PopupMenuItem<String>(
+                // Opción para activar/desactivar el marcado de filas con un switch
+                value: 'señalar',
+                child: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                    return ListTile(
+                      leading: Icon(Icons.drive_file_rename_outline),
+                      title: const Text('Señalar filas'),
+                      trailing: Switch(
+                        value: _isMarkingActive,
+                        onChanged: (bool newValue) {
+                          setState(() {
+                            _isMarkingActive = newValue;
+                          });
+                          Navigator.pop(context); // Cerrar el menú después de cambiar
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ],
       ),
       body: FutureBuilder<List<InventarioPCs>>(
-        future: _futureInventarios, // Usar el Future almacenado
+        future: _futureInventarios,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child:
-                  CircularProgressIndicator(), // Muestra un indicador de carga
+              child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
             return const Center(
-              child: Text(
-                  'Error al cargar los datos'), // Muestra un mensaje de error
+              child: Text('Error al cargar los datos'),
             );
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
-              child: Text(
-                  'No hay datos disponibles'), // Muestra un mensaje si no hay datos
+              child: Text('No hay datos disponibles'),
             );
           } else {
-            var inventarios = snapshot.data!; // Obtiene la lista de inventarios
+            var inventarios = snapshot.data!;
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SingleChildScrollView(
-                scrollDirection:
-                    Axis.vertical, // Habilita el desplazamiento vertical
+                scrollDirection: Axis.vertical,
                 child: DataTable(
                   columns: const [
                     DataColumn(label: Text('ID')),
@@ -77,7 +125,6 @@ class _PCsHomeState extends State<PCsHome> {
                     DataColumn(label: Text('Funcionario')),
                     DataColumn(label: Text('Puesto')),
                     DataColumn(label: Text('IP')),
-                    
                     DataColumn(label: Text('Red Conectada')),
                     DataColumn(label: Text('Nombre de la Red')),
                     DataColumn(label: Text('DNS 1')),
@@ -99,7 +146,6 @@ class _PCsHomeState extends State<PCsHome> {
                         DataCell(Text(pc.nombreDelFuncionario ?? 'N/A')),
                         DataCell(Text(pc.puestoQueOcupa ?? 'N/A')),
                         DataCell(Text(pc.ip ?? 'N/A')),
-                        
                         DataCell(Text(pc.redConectada ?? 'N/A')),
                         DataCell(Text(pc.nombreDeRed ?? 'N/A')),
                         DataCell(Text(pc.dns1 ?? 'N/A')),
@@ -128,7 +174,7 @@ class _PCsHomeState extends State<PCsHome> {
             ),
           );
           if (result == true) {
-            _refreshPCs(); // Refrescar datos después de agregar una PC
+            _refreshPCs();
           }
         },
         child: const Icon(Icons.add),
