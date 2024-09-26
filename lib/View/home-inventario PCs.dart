@@ -12,21 +12,43 @@ class _PCsHomeState extends State<PCsHome> {
   Future<List<InventarioPCs>>? _futureInventarios;
   bool _isEditActive = false; // Variable para el Switch de edición
   bool _isMarkingActive = false; // Variable para el Switch de señalar filas
-
+  List<InventarioPCs> _inventariosFiltrados = [];
+  final InventarioService _inventarioService = InventarioService();
+  final TextEditingController _searchController = TextEditingController();
   @override
   void initState() {
     super.initState();
     _futureInventarios = _inventarioService.obtenerInventario();
+    _searchController.addListener(_filterInventarios);
   }
-
   Future<void> _refreshPCs() async {
     setState(() {
       _futureInventarios = _inventarioService.obtenerInventario();
     });
   }
+  // Función para filtrar los resultados basados en el valor del campo de búsqueda
+  void _filterInventarios() {
+    final query = _searchController.text.toLowerCase();
 
-  final InventarioService _inventarioService = InventarioService();
-
+    setState(() {
+      if (query.isEmpty) {
+        _inventariosFiltrados = [];
+      } else {
+        _futureInventarios!.then((inventarios) {
+          _inventariosFiltrados = inventarios.where((pc) {
+            return pc.nombreDeLaPc!.toLowerCase().contains(query) ||
+                pc.ip!.toLowerCase().contains(query) ||
+                pc.nombreDelFuncionario!.toLowerCase().contains(query);
+          }).toList();
+        });
+      }
+    });
+  }
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,68 +116,57 @@ class _PCsHomeState extends State<PCsHome> {
             ],
           ),
         ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(50),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Buscar por nombre de PC, IP, o Funcionario',
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.search),
+              ),
+            ),
+          ),
+        ),
       ),
       body: FutureBuilder<List<InventarioPCs>>(
         future: _futureInventarios,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(
-              child: Text('Error al cargar los datos'),
-            );
+            return const Center(child: Text('Error al cargar los datos'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(
-              child: Text('No hay datos disponibles'),
-            );
+            return const Center(child: Text('No hay datos disponibles'));
           } else {
-            var inventarios = snapshot.data!;
+            var inventarios = _inventariosFiltrados.isNotEmpty
+                ? _inventariosFiltrados
+                : snapshot.data!;
+
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: DataTable(
                   columns: const [
-                    DataColumn(label: Text('ID')),
-                    DataColumn(label: Text('Marca Temporal')),
-                    DataColumn(label: Text('Unidad')),
-                    DataColumn(label: Text('Nombre de la PC')),
-                    DataColumn(label: Text('Funcionario')),
-                    DataColumn(label: Text('Puesto')),
-                    DataColumn(label: Text('IP')),
-                    DataColumn(label: Text('Red Conectada')),
-                    DataColumn(label: Text('Nombre de la Red')),
-                    DataColumn(label: Text('DNS 1')),
-                    DataColumn(label: Text('DNS 2')),
-                    DataColumn(label: Text('Sistema Operativo')),
-                    DataColumn(label: Text('Maquina todo en uno')),
-                    DataColumn(label: Text('Características PC')),
-                    DataColumn(label: Text('Laptop')),
-                    DataColumn(label: Text('Codigo ACT Fijos')),
-                    DataColumn(label: Text('Estado de la Computadora')),
+                    DataColumn(label: Text('ID')), DataColumn(label: Text('Marca Temporal')),DataColumn(label: Text('Unidad')),
+                    DataColumn(label: Text('Nombre de la PC')), DataColumn(label: Text('Funcionario')), DataColumn(label: Text('Puesto')),
+                    DataColumn(label: Text('IP')), DataColumn(label: Text('Red Conectada')), DataColumn(label: Text('Nombre de la Red')),
+                    DataColumn(label: Text('DNS 1')), DataColumn(label: Text('DNS 2')), DataColumn(label: Text('Sistema Operativo')),
+                    DataColumn(label: Text('Maquina todo en uno')), DataColumn(label: Text('Características PC')),
+                    DataColumn(label: Text('Laptop')), DataColumn(label: Text('Codigo ACT Fijos')), DataColumn(label: Text('Estado de la Computadora')),
                   ],
                   rows: inventarios.map((pc) {
                     return DataRow(
                       cells: [
-                        DataCell(Text(pc.idPc ?? 'N/A')),
-                        DataCell(Text(pc.marcaTemporal)),
-                        DataCell(Text(pc.unidad)),
-                        DataCell(Text(pc.nombreDeLaPc ?? 'Sin nombre')),
-                        DataCell(Text(pc.nombreDelFuncionario ?? 'N/A')),
-                        DataCell(Text(pc.puestoQueOcupa ?? 'N/A')),
-                        DataCell(Text(pc.ip ?? 'N/A')),
-                        DataCell(Text(pc.redConectada ?? 'N/A')),
-                        DataCell(Text(pc.nombreDeRed ?? 'N/A')),
-                        DataCell(Text(pc.dns1 ?? 'N/A')),
-                        DataCell(Text(pc.dns2 ?? 'N/A')),
-                        DataCell(Text(pc.sistemaOperativo ?? 'N/A')),
-                        DataCell(Text(pc.maquinaTodoEnUno ?? 'N/A')),
-                        DataCell(Text(pc.caracteristicas ?? 'N/A')),
-                        DataCell(Text(pc.laptop ?? 'N/A')),
-                        DataCell(Text(pc.codigoActFijos ?? 'N/A')),
-                        DataCell(Text(pc.estadoDeComputadora ?? 'N/A')),
+                        DataCell(Text(pc.idPc)), DataCell(Text(pc.marcaTemporal)), DataCell(Text(pc.unidad)),
+                        DataCell(Text(pc.nombreDeLaPc)), DataCell(Text(pc.nombreDelFuncionario)),DataCell(Text(pc.puestoQueOcupa)),
+                        DataCell(Text(pc.ip)), DataCell(Text(pc.redConectada)), DataCell(Text(pc.nombreDeRed)), DataCell(Text(pc.dns1)),
+                        DataCell(Text(pc.dns2)), DataCell(Text(pc.sistemaOperativo)), DataCell(Text(pc.maquinaTodoEnUno)),
+                        DataCell(Text(pc.caracteristicas)),  DataCell(Text(pc.laptop)),  DataCell(Text(pc.codigoActFijos)),
+                        DataCell(Text(pc.estadoDeComputadora)),
                       ],
                     );
                   }).toList(),
@@ -169,9 +180,7 @@ class _PCsHomeState extends State<PCsHome> {
         onPressed: () async {
           bool? result = await Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => AgregarPCs(),
-            ),
+            MaterialPageRoute(builder: (context) => AgregarPCs()),
           );
           if (result == true) {
             _refreshPCs();
