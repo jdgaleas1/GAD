@@ -11,25 +11,48 @@ class PCsHome extends StatefulWidget {
 }
 
 class _PCsHomeState extends State<PCsHome> {
-  Future<List<InventarioPCs>>?
-      _futureInventarios; // Variable para almacenar el Future
+  Future<List<InventarioPCs>>? _futureInventarios;
+  List<InventarioPCs> _inventariosFiltrados = [];
+  final InventarioService _inventarioService = InventarioService();
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _futureInventarios =
-        _inventarioService.obtenerInventario(); // Cargar datos al iniciar
+    _futureInventarios = _inventarioService.obtenerInventario();
+    _searchController.addListener(_filterInventarios);
   }
 
   Future<void> _refreshPCs() async {
     setState(() {
-      _futureInventarios =
-          _inventarioService.obtenerInventario(); // Refrescar los datos
+      _futureInventarios = _inventarioService.obtenerInventario();
     });
   }
 
-  final InventarioService _inventarioService =
-      InventarioService(); // Instancia del servicio
+  // Función para filtrar los resultados basados en el valor del campo de búsqueda
+  void _filterInventarios() {
+    final query = _searchController.text.toLowerCase();
+
+    setState(() {
+      if (query.isEmpty) {
+        _inventariosFiltrados = [];
+      } else {
+        _futureInventarios!.then((inventarios) {
+          _inventariosFiltrados = inventarios.where((pc) {
+            return pc.nombreDeLaPc!.toLowerCase().contains(query) ||
+                pc.ip!.toLowerCase().contains(query) ||
+                pc.nombreDelFuncionario!.toLowerCase().contains(query);
+          }).toList();
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,35 +62,42 @@ class _PCsHomeState extends State<PCsHome> {
         actions: [
           IconButton(
             icon: const Icon(Icons.update),
-            onPressed: _refreshPCs, // Correcta referencia a la función
+            onPressed: _refreshPCs,
           ),
         ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(50),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Buscar por nombre de PC, IP, o Funcionario',
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.search),
+              ),
+            ),
+          ),
+        ),
       ),
       body: FutureBuilder<List<InventarioPCs>>(
-        future: _futureInventarios, // Usar el Future almacenado
+        future: _futureInventarios,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child:
-                  CircularProgressIndicator(), // Muestra un indicador de carga
-            );
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(
-              child: Text(
-                  'Error al cargar los datos'), // Muestra un mensaje de error
-            );
+            return const Center(child: Text('Error al cargar los datos'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(
-              child: Text(
-                  'No hay datos disponibles'), // Muestra un mensaje si no hay datos
-            );
+            return const Center(child: Text('No hay datos disponibles'));
           } else {
-            var inventarios = snapshot.data!; // Obtiene la lista de inventarios
+            var inventarios = _inventariosFiltrados.isNotEmpty
+                ? _inventariosFiltrados
+                : snapshot.data!;
+
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SingleChildScrollView(
-                scrollDirection:
-                    Axis.vertical, // Habilita el desplazamiento vertical
+                scrollDirection: Axis.vertical,
                 child: DataTable(
                   columns: const [
                     DataColumn(label: Text('ID')),
@@ -77,7 +107,6 @@ class _PCsHomeState extends State<PCsHome> {
                     DataColumn(label: Text('Funcionario')),
                     DataColumn(label: Text('Puesto')),
                     DataColumn(label: Text('IP')),
-                    
                     DataColumn(label: Text('Red Conectada')),
                     DataColumn(label: Text('Nombre de la Red')),
                     DataColumn(label: Text('DNS 1')),
@@ -99,7 +128,6 @@ class _PCsHomeState extends State<PCsHome> {
                         DataCell(Text(pc.nombreDelFuncionario ?? 'N/A')),
                         DataCell(Text(pc.puestoQueOcupa ?? 'N/A')),
                         DataCell(Text(pc.ip ?? 'N/A')),
-                        
                         DataCell(Text(pc.redConectada ?? 'N/A')),
                         DataCell(Text(pc.nombreDeRed ?? 'N/A')),
                         DataCell(Text(pc.dns1 ?? 'N/A')),
@@ -123,12 +151,10 @@ class _PCsHomeState extends State<PCsHome> {
         onPressed: () async {
           bool? result = await Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => AgregarPCs(),
-            ),
+            MaterialPageRoute(builder: (context) => AgregarPCs()),
           );
           if (result == true) {
-            _refreshPCs(); // Refrescar datos después de agregar una PC
+            _refreshPCs();
           }
         },
         child: const Icon(Icons.add),
