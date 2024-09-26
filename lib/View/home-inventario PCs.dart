@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gad/View/Inventario-PCS.dart';
 import 'package:gad/Service/Inventario-PC-Servicio.dart';
 import 'package:gad/Model/Inventario-PC-model.dart';
-
 class PCsHome extends StatefulWidget {
   const PCsHome({super.key});
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gad/Model/Inventario-PC-model.dart'; // Asegúrate de importar tu modelo
 import 'package:gad/Service/Inventario-PC-Servicio.dart'; // Asegúrate de importar el servicio
 
@@ -13,6 +14,7 @@ class _AgregarPCsState extends State<AgregarPCs> {
   final _formKey = GlobalKey<FormState>();
 
   // Controladores
+  TextEditingController idPCCOntroller = TextEditingController();
   TextEditingController marcacontroller = TextEditingController();
   TextEditingController NombrePCcontroller = TextEditingController();
   TextEditingController IPcontroller = TextEditingController();
@@ -51,35 +53,25 @@ class _AgregarPCsState extends State<AgregarPCs> {
   // Método para guardar los datos en la base de datos
   _guardarPC() async {
     if (_formKey.currentState!.validate()) {
-      // Crear una instancia de InventarioPCs con los datos ingresados
+              // Aquí agregamos el prefijo "PC-" al número ingresado
+      String idPCFormatted = 'PC-${idPCCOntroller.text}';
       InventarioPCs nuevaPC = InventarioPCs(
-        idPc: '',  // El ID se generará automáticamente
-        marcaTemporal: marcacontroller.text,
-        unidad: unidadSeleccionada!,
-        ip: IPcontroller.text,
-        nombreDeLaPc: NombrePCcontroller.text,
-        nombreDelFuncionario: NombreFuncionariocontroller.text,
-        puestoQueOcupa: puestoFuncionariocontroller.text,
-        redConectada: redConectadaSeleccionada!,
-        nombreDeRed: nombreRedSeleccionada!,
-        dns1: dns1controller.text,
-        dns2: dns2controller.text,
-        sistemaOperativo: sistemaOperativocontroller.text,
-        maquinaTodoEnUno: maquinaTodoEnUnoSeleccionada!,
-        caracteristicas: CaracteristicasController.text,
-        laptop: laptopSeleccionada!,
-        codigoActFijos: codigoController.text,
+        idPc: idPCFormatted,                              marcaTemporal: marcacontroller.text,
+        unidad: unidadSeleccionada!,                      ip: IPcontroller.text,
+        nombreDeLaPc: NombrePCcontroller.text,            nombreDelFuncionario: NombreFuncionariocontroller.text,
+        puestoQueOcupa: puestoFuncionariocontroller.text, redConectada: redConectadaSeleccionada!,
+        nombreDeRed: nombreRedSeleccionada!,              dns1: dns1controller.text,
+        dns2: dns2controller.text,                        sistemaOperativo: sistemaOperativocontroller.text,
+        maquinaTodoEnUno: maquinaTodoEnUnoSeleccionada!,  caracteristicas: CaracteristicasController.text,
+        laptop: laptopSeleccionada!,                      codigoActFijos: codigoController.text,
         estadoDeComputadora: estadoPCSeleccionado!,
       );
-
       // Guardar los datos en Firestore usando el servicio
       await _inventarioService.guardarInventario(nuevaPC);
-
       // Mostrar mensaje de éxito
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Guardado exitosamente')),
       );
-
       // Resetear el formulario o navegar de vuelta
       Navigator.pop(context, true);
     }
@@ -97,6 +89,18 @@ class _AgregarPCsState extends State<AgregarPCs> {
           key: _formKey,
           child: ListView(
             children: [
+                    TextFormField(
+                      controller: idPCCOntroller,
+                      decoration: const InputDecoration(labelText: 'ID PC'),
+                      keyboardType: TextInputType.number, // Tipo de teclado solo numérico
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor ingrese un id/numero que identifique esa PC';
+                        }
+                        return null;
+                      },
+                    ),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: marcacontroller,
                 decoration: const InputDecoration(labelText: 'Marca Temporal'),

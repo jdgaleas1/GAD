@@ -4,8 +4,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:gad/Model/Inventario-PC-model.dart';
 import 'package:gad/Service/Inventario-PC-Servicio.dart';
 import 'package:path_provider/path_provider.dart'; // Para obtener el directorio de descarga
-import 'package:permission_handler/permission_handler.dart';
-
 class ImportarExportar {
   final InventarioService _inventarioService =
       InventarioService(); 
@@ -39,26 +37,14 @@ class ImportarExportar {
           if (_esFilaVacia(row)) {
             break; // Detiene el bucle si encuentra una fila completamente vacía
           }
-
           // Procesar la fila si no está vacía
           InventarioPCs nuevaPC = InventarioPCs(
-            idPc: row[0]?.value.toString() ?? '', // El ID se generará automáticamente
-            marcaTemporal: row[1]?.value.toString() ?? '',
-            unidad: row[2]?.value.toString() ?? '',
-            ip: row[3]?.value.toString() ?? '',
-            nombreDeLaPc: row[4]?.value.toString() ?? '',
-            nombreDelFuncionario: row[5]?.value.toString() ?? '',
-            puestoQueOcupa: row[6]?.value.toString() ?? '',
-            redConectada: row[7]?.value.toString() ?? '',
-            nombreDeRed: row[8]?.value.toString() ?? '',
-            dns1: row[9]?.value.toString() ?? '',
-            dns2: row[10]?.value.toString() ?? '',
-            sistemaOperativo: row[11]?.value.toString() ?? '',
-            maquinaTodoEnUno: row[12]?.value.toString() ?? '',
-            caracteristicas: row[13]?.value.toString() ?? '',
-            laptop: row[14]?.value.toString() ?? '',
-            codigoActFijos: row[15]?.value.toString() ?? '',
-            estadoDeComputadora: row[16]?.value.toString() ?? '',
+            idPc: row[0]?.value.toString() ?? '', marcaTemporal: row[1]?.value.toString() ?? '', unidad: row[2]?.value.toString() ?? '',
+            ip: row[3]?.value.toString() ?? '', nombreDeLaPc: row[4]?.value.toString() ?? '', nombreDelFuncionario: row[5]?.value.toString() ?? '',
+            puestoQueOcupa: row[6]?.value.toString() ?? '', redConectada: row[7]?.value.toString() ?? '', nombreDeRed: row[8]?.value.toString() ?? '',
+            dns1: row[9]?.value.toString() ?? '', dns2: row[10]?.value.toString() ?? '', sistemaOperativo: row[11]?.value.toString() ?? '',
+            maquinaTodoEnUno: row[12]?.value.toString() ?? '', caracteristicas: row[13]?.value.toString() ?? '',
+            laptop: row[14]?.value.toString() ?? '', codigoActFijos: row[15]?.value.toString() ?? '', estadoDeComputadora: row[16]?.value.toString() ?? '',
           );
 
           // Guardar cada fila en Firestore
@@ -79,52 +65,32 @@ class ImportarExportar {
 
     // Añadir la primera fila con los títulos de las columnas
     sheetObject.appendRow([
-      "#",
-      'Marca temporal',
-      'Unidad',
-      'IP',
-      'NOMBRE DE LA PC',
-      'NOMBRE DEL FUNCIONARIO',
-      'PUESTO QUE OCUPA',
-      'RED CONECTADA',
-      'NOMBRE DE RED',
-      'DNS-1',
-      'DNS-2',
-      'SISTEMA OPERATIVO',
-      'MAQUINA TODO EN UNO',
-      'CARACTERISTICAS',
-      'LAPTOP',
-      'CODIGO ACT FIJOS',
-      'ESTADO DE COMPUTADORA'
+      "#",                      'Marca temporal',
+      'Unidad',                 'IP',
+      'NOMBRE DE LA PC',        'NOMBRE DEL FUNCIONARIO',
+      'PUESTO QUE OCUPA',       'RED CONECTADA',
+      'NOMBRE DE RED',          'DNS-1',
+      'DNS-2',                  'SISTEMA OPERATIVO',
+      'MAQUINA TODO EN UNO',    'CARACTERISTICAS',
+      'LAPTOP',                 'CODIGO ACT FIJOS',        'ESTADO DE COMPUTADORA'
     ]);
 
     // Llenar las filas con los datos del inventario
     for (var inventario in inventarioData) {
       sheetObject.appendRow([
-        inventario.idPc ?? '',
-        inventario.marcaTemporal ?? '',
-        inventario.unidad ?? '',
-        inventario.ip ?? '',
-        inventario.nombreDeLaPc ?? '',
-        inventario.nombreDelFuncionario ?? '',
-        inventario.puestoQueOcupa ?? '',
-        inventario.redConectada ?? '',
-        inventario.nombreDeRed ?? '',
-        inventario.dns1 ?? '',
-        inventario.dns2 ?? '',
-        inventario.sistemaOperativo ?? '',
-        inventario.maquinaTodoEnUno ?? '',
-        inventario.caracteristicas ?? '',
-        inventario.laptop ?? '',
-        inventario.codigoActFijos ?? '',
-        inventario.estadoDeComputadora ?? '',
+        inventario.idPc ?? '',                inventario.marcaTemporal ?? '',
+        inventario.unidad ?? '',              inventario.ip ?? '',
+        inventario.nombreDeLaPc ?? '',        inventario.nombreDelFuncionario ?? '',
+        inventario.puestoQueOcupa ?? '',      inventario.redConectada ?? '',
+        inventario.nombreDeRed ?? '',         inventario.dns1 ?? '',
+        inventario.dns2 ?? '',                inventario.sistemaOperativo ?? '',    
+        inventario.maquinaTodoEnUno ?? '',    inventario.caracteristicas ?? '',
+        inventario.laptop ?? '',              inventario.codigoActFijos ?? '',         inventario.estadoDeComputadora ?? '',
       ]);
     }
-
     // Obtener el directorio de Descargas
     Directory? downloadsDirectory =
         await getExternalStorageDirectory(); // Cambiado a un directorio accesible
-
     if (downloadsDirectory != null) {
       String filePath = '${downloadsDirectory.path}/InventarioPCs.xlsx';
 
