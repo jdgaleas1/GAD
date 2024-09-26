@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gad/View/Inventario-PCS.dart';
 import 'package:gad/Service/Inventario-PC-Servicio.dart';
 import 'package:gad/Model/Inventario-PC-model.dart';
+
 class PCsHome extends StatefulWidget {
   const PCsHome({super.key});
 
@@ -16,7 +17,7 @@ class _PCsHomeState extends State<PCsHome> {
   final InventarioService _inventarioService = InventarioService();
   final TextEditingController _searchController = TextEditingController();
   Timer? _debounce; // Variable para manejar el temporizador de debounce
-    bool _isEditActive = false; // Variable para el Switch de edición
+  bool _isEditActive = false; // Variable para el Switch de edición
   bool _isMarkingActive = false; // Variable para el Switch de señalar filas
 
   @override
@@ -74,11 +75,8 @@ class _PCsHomeState extends State<PCsHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
-        title: const Center(
-          child: Text('Inventario PCs'),
-        ),
+        title: const Center(),
         actions: [
           PopupMenuButton<String>(
             onSelected: (String result) {
@@ -108,7 +106,8 @@ class _PCsHomeState extends State<PCsHome> {
                           setState(() {
                             _isEditActive = newValue;
                           });
-                          Navigator.pop(context); // Cerrar el menú después de cambiar
+                          Navigator.pop(
+                              context); // Cerrar el menú después de cambiar
                         },
                       ),
                     );
@@ -129,7 +128,8 @@ class _PCsHomeState extends State<PCsHome> {
                           setState(() {
                             _isMarkingActive = newValue;
                           });
-                          Navigator.pop(context); // Cerrar el menú después de cambiar
+                          Navigator.pop(
+                              context); // Cerrar el menú después de cambiar
                         },
                       ),
                     );
@@ -173,23 +173,46 @@ class _PCsHomeState extends State<PCsHome> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: DataTable(
+                  dataRowHeight: 160,
                   columns: const [
-                    DataColumn(label: Text('ID')), DataColumn(label: Text('Marca Temporal')),DataColumn(label: Text('Unidad')),
-                    DataColumn(label: Text('Nombre de la PC')), DataColumn(label: Text('Funcionario')), DataColumn(label: Text('Puesto')),
-                    DataColumn(label: Text('IP')), DataColumn(label: Text('Red Conectada')), DataColumn(label: Text('Nombre de la Red')),
-                    DataColumn(label: Text('DNS 1')), DataColumn(label: Text('DNS 2')), DataColumn(label: Text('Sistema Operativo')),
-                    DataColumn(label: Text('Maquina todo en uno')), DataColumn(label: Text('Características PC')),
-                    DataColumn(label: Text('Laptop')), DataColumn(label: Text('Codigo ACT Fijos')), DataColumn(label: Text('Estado de la Computadora')),
+                    DataColumn(label: Text('ID')),
+                    DataColumn(label: Text('Marca Temporal')),
+                    DataColumn(label: Text('Unidad')),
+                    DataColumn(label: Text('Nombre de la PC')),
+                    DataColumn(label: Text('Funcionario')),
+                    DataColumn(label: Text('Puesto')),
+                    DataColumn(label: Text('IP')),
+                    DataColumn(label: Text('Red Conectada')),
+                    DataColumn(label: Text('Nombre de la Red')),
+                    DataColumn(label: Text('DNS 1')),
+                    DataColumn(label: Text('DNS 2')),
+                    DataColumn(label: Text('Sistema Operativo')),
+                    DataColumn(label: Text('Maquina todo en uno')),
+                    DataColumn(label: Text('Características PC')),
+                    DataColumn(label: Text('Laptop')),
+                    DataColumn(label: Text('Codigo ACT Fijos')),
+                    DataColumn(label: Text('Estado de la Computadora')),
                   ],
                   rows: inventarios.map((pc) {
                     return DataRow(
                       cells: [
-                        DataCell(Text(pc.idPc ?? 'N/A')), DataCell(Text(pc.marcaTemporal)), DataCell(Text(pc.unidad)),
-                        DataCell(Text(pc.nombreDeLaPc ?? 'Sin nombre')), DataCell(Text(pc.nombreDelFuncionario ?? 'N/A')),
-                        DataCell(Text(pc.puestoQueOcupa ?? 'N/A')), DataCell(Text(pc.ip ?? 'N/A')), DataCell(Text(pc.redConectada ?? 'N/A')),
-                        DataCell(Text(pc.nombreDeRed ?? 'N/A')), DataCell(Text(pc.dns1 ?? 'N/A')), DataCell(Text(pc.dns2 ?? 'N/A')),
-                        DataCell(Text(pc.sistemaOperativo ?? 'N/A')), DataCell(Text(pc.maquinaTodoEnUno ?? 'N/A')), DataCell(Text(pc.caracteristicas ?? 'N/A')),
-                        DataCell(Text(pc.laptop ?? 'N/A')), DataCell(Text(pc.codigoActFijos ?? 'N/A')), DataCell(Text(pc.estadoDeComputadora ?? 'N/A')),
+                        DataCell(Text(pc.idPc ?? 'N/A')),
+                        DataCell(Text(pc.marcaTemporal)),
+                        DataCell(Text(pc.unidad)),
+                        DataCell(Text(pc.nombreDeLaPc ?? 'Sin nombre')),
+                        DataCell(Text(pc.nombreDelFuncionario ?? 'N/A')),
+                        DataCell(Text(pc.puestoQueOcupa ?? 'N/A')),
+                        DataCell(Text(pc.ip ?? 'N/A')),
+                        DataCell(Text(pc.redConectada ?? 'N/A')),
+                        DataCell(Text(pc.nombreDeRed ?? 'N/A')),
+                        DataCell(Text(pc.dns1 ?? 'N/A')),
+                        DataCell(Text(pc.dns2 ?? 'N/A')),
+                        DataCell(Text(pc.sistemaOperativo ?? 'N/A')),
+                        DataCell(Text(pc.maquinaTodoEnUno ?? 'N/A')),
+                        DataCell(Text(pc.caracteristicas ?? 'N/A')),
+                        DataCell(Text(pc.laptop ?? 'N/A')),
+                        DataCell(Text(pc.codigoActFijos ?? 'N/A')),
+                        DataCell(Text(pc.estadoDeComputadora ?? 'N/A')),
                       ],
                     );
                   }).toList(),
