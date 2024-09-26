@@ -16,6 +16,8 @@ class _PCsHomeState extends State<PCsHome> {
   final InventarioService _inventarioService = InventarioService();
   final TextEditingController _searchController = TextEditingController();
   Timer? _debounce; // Variable para manejar el temporizador de debounce
+    bool _isEditActive = false; // Variable para el Switch de edición
+  bool _isMarkingActive = false; // Variable para el Switch de señalar filas
 
   @override
   void initState() {
@@ -72,12 +74,69 @@ class _PCsHomeState extends State<PCsHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
-        title: const Text('Inventario PCs'),
+        title: const Center(
+          child: Text('Inventario PCs'),
+        ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.update),
-            onPressed: _refreshPCs,
+          PopupMenuButton<String>(
+            onSelected: (String result) {
+              if (result == 'refrescar') {
+                _refreshPCs();
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'refrescar',
+                child: ListTile(
+                  leading: Icon(Icons.refresh),
+                  title: Text('Refrescar lista'),
+                ),
+              ),
+              PopupMenuItem<String>(
+                // Opción para activar/desactivar la edición con un switch
+                value: 'edicion',
+                child: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                    return ListTile(
+                      leading: Icon(Icons.edit),
+                      title: const Text('Edición activa'),
+                      trailing: Switch(
+                        value: _isEditActive,
+                        onChanged: (bool newValue) {
+                          setState(() {
+                            _isEditActive = newValue;
+                          });
+                          Navigator.pop(context); // Cerrar el menú después de cambiar
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+              PopupMenuItem<String>(
+                // Opción para activar/desactivar el marcado de filas con un switch
+                value: 'señalar',
+                child: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                    return ListTile(
+                      leading: Icon(Icons.drive_file_rename_outline),
+                      title: const Text('Señalar filas'),
+                      trailing: Switch(
+                        value: _isMarkingActive,
+                        onChanged: (bool newValue) {
+                          setState(() {
+                            _isMarkingActive = newValue;
+                          });
+                          Navigator.pop(context); // Cerrar el menú después de cambiar
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ],
         bottom: PreferredSize(
