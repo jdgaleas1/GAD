@@ -51,7 +51,7 @@ class _PCsHomeState extends State<PCsHome> {
     setState(() {
       _futureInventarios!.then((inventarios) {
         _inventariosFiltrados = inventarios.where((pc) {
-          return pc.nombreDeLaPc!.toLowerCase().contains(query) ||
+          return pc.codigoActFijos!.toLowerCase().contains(query) ||
               pc.ip!.toLowerCase().contains(query) ||
               pc.nombreDelFuncionario!.toLowerCase().contains(query);
         }).toList();
@@ -76,7 +76,9 @@ class _PCsHomeState extends State<PCsHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(),
+        title: const Center(
+          child: Text('Inventario PCs'),
+        ),
         actions: [
           PopupMenuButton<String>(
             onSelected: (String result) {
@@ -146,7 +148,7 @@ class _PCsHomeState extends State<PCsHome> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: 'Buscar por nombre de PC, IP, o Funcionario',
+                hintText: 'Buscar por Codigo, IP, o Funcionario',
                 border: const OutlineInputBorder(),
                 prefixIcon: const Icon(Icons.search),
               ),
