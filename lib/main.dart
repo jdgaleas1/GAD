@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Inventario',
       theme: themeProvider.getTheme(),
-      home: MyHomePage(title: 'Inventario PCs'), // Define la home aquí
+      home: MyHomePage(title: 'Inventario'), // Define la home aquí
       debugShowCheckedModeBanner: false,
     );
   }

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'dart:async'; // Importa el paquete de temporizador
 import 'package:flutter/material.dart';
 import 'package:gad/View/Inventario-PCS.dart';
@@ -74,88 +76,87 @@ class _PCsHomeState extends State<PCsHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Center(
-          child: Text('Inventario PCs'),
-        ),
+      return Scaffold(
+       
+        appBar: AppBar(
         actions: [
-          PopupMenuButton<String>(
-            onSelected: (String result) {
-              if (result == 'refrescar') {
-                _refreshPCs();
-              }
-            },
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              const PopupMenuItem<String>(
-                value: 'refrescar',
-                child: ListTile(
-                  leading: Icon(Icons.refresh),
-                  title: Text('Refrescar lista'),
+              // Añadimos el TextField en las acciones para que esté en la misma fila que el PopupMenuButton
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Buscar por Codigo, IP, o Funcionario',
+                    border: InputBorder.none,
+                    prefixIcon: const Icon(Icons.search),
+                  ),
                 ),
-              ),
-              PopupMenuItem<String>(
-                // Opción para activar/desactivar la edición con un switch
-                value: 'edicion',
-                child: StatefulBuilder(
-                  builder: (BuildContext context, StateSetter setState) {
-                    return ListTile(
-                      leading: Icon(Icons.edit),
-                      title: const Text('Edición activa'),
-                      trailing: Switch(
-                        value: _isEditActive,
-                        onChanged: (bool newValue) {
-                          setState(() {
-                            _isEditActive = newValue;
-                          });
-                          Navigator.pop(
-                              context); // Cerrar el menú después de cambiar
-                        },
-                      ),
-                    );
-                  },
-                ),
-              ),
-              PopupMenuItem<String>(
-                // Opción para activar/desactivar el marcado de filas con un switch
-                value: 'señalar',
-                child: StatefulBuilder(
-                  builder: (BuildContext context, StateSetter setState) {
-                    return ListTile(
-                      leading: Icon(Icons.drive_file_rename_outline),
-                      title: const Text('Señalar filas'),
-                      trailing: Switch(
-                        value: _isMarkingActive,
-                        onChanged: (bool newValue) {
-                          setState(() {
-                            _isMarkingActive = newValue;
-                          });
-                          Navigator.pop(
-                              context); // Cerrar el menú después de cambiar
-                        },
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(50),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Buscar por Codigo, IP, o Funcionario',
-                border: const OutlineInputBorder(),
-                prefixIcon: const Icon(Icons.search),
               ),
             ),
-          ),
+            PopupMenuButton<String>(
+              onSelected: (String result) {
+                if (result == 'refrescar') {
+                  _refreshPCs();
+                }
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                const PopupMenuItem<String>(
+                  value: 'refrescar',
+                  child: ListTile(
+                    leading: Icon(Icons.refresh),
+                    title: Text('Refrescar lista'),
+                  ),
+                ),
+                PopupMenuItem<String>(
+                  // Opción para activar/desactivar la edición con un switch
+                  value: 'edicion',
+                  child: StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                      return ListTile(
+                        leading: Icon(Icons.edit),
+                        title: const Text('Edición activa'),
+                        trailing: Switch(
+                          value: _isEditActive,
+                          onChanged: (bool newValue) {
+                            setState(() {
+                              _isEditActive = newValue;
+                            });
+                            Navigator.pop(
+                                context); // Cerrar el menú después de cambiar
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                
+                PopupMenuItem<String>(
+                  // Opción para activar/desactivar el marcado de filas con un switch
+                  value: 'señalar',
+                  child: StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                      return ListTile(
+                        leading: Icon(Icons.drive_file_rename_outline),
+                        title: const Text('Señalar filas'),
+                        trailing: Switch(
+                          value: _isMarkingActive,
+                          onChanged: (bool newValue) {
+                            setState(() {
+                              _isMarkingActive = newValue;
+                            });
+                            Navigator.pop(
+                                context); // Cerrar el menú después de cambiar
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
-      ),
       body: FutureBuilder<List<InventarioPCs>>(
         future: _futureInventarios,
         builder: (context, snapshot) {
