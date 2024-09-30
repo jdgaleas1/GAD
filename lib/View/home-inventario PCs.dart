@@ -1,6 +1,4 @@
-// ignore_for_file: file_names
-
-import 'dart:async'; // Importa el paquete de temporizador
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gad/View/Inventario-PCS.dart';
 import 'package:gad/Service/Inventario-PC-Servicio.dart';
@@ -18,9 +16,8 @@ class _PCsHomeState extends State<PCsHome> {
   List<InventarioPCs> _inventariosFiltrados = [];
   final InventarioService _inventarioService = InventarioService();
   final TextEditingController _searchController = TextEditingController();
-  Timer? _debounce; // Variable para manejar el temporizador de debounce
-  bool _isEditActive = false; // Variable para el Switch de edición
-  bool _isMarkingActive = false; // Variable para el Switch de señalar filas
+  Timer? _debounce;
+  List<String> _editingRows = []; // Lista para rastrear las filas en edición
 
   @override
   void initState() {
@@ -29,27 +26,21 @@ class _PCsHomeState extends State<PCsHome> {
     _searchController.addListener(_onSearchChanged);
   }
 
-  // Cuando el texto cambia, reseteamos el temporizador
   void _onSearchChanged() {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
-
-    // Solo iniciar la búsqueda cuando haya al menos 3 caracteres
     if (_searchController.text.length >= 4) {
       _debounce = Timer(const Duration(milliseconds: 500), () {
         _filterInventarios();
       });
     } else {
-      // Limpiar los resultados si hay menos de 3 caracteres
       setState(() {
         _inventariosFiltrados.clear();
       });
     }
   }
 
-  // Función para filtrar los resultados basados en el valor del campo de búsqueda
   void _filterInventarios() {
     final query = _searchController.text.toLowerCase();
-
     setState(() {
       _futureInventarios!.then((inventarios) {
         _inventariosFiltrados = inventarios.where((pc) {
@@ -70,92 +61,46 @@ class _PCsHomeState extends State<PCsHome> {
   @override
   void dispose() {
     _searchController.dispose();
-    _debounce?.cancel(); // Cancelar el temporizador al destruir el widget
+    _debounce?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
-       
-        appBar: AppBar(
+    return Scaffold(
+      appBar: AppBar(
         actions: [
-              // Añadimos el TextField en las acciones para que esté en la misma fila que el PopupMenuButton
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    hintText: 'Buscar por Codigo, IP, o Funcionario',
-                    border: InputBorder.none,
-                    prefixIcon: const Icon(Icons.search),
-                  ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Buscar por Codigo, IP, o Funcionario',
+                  border: InputBorder.none,
+                  prefixIcon: const Icon(Icons.search),
                 ),
               ),
             ),
-            PopupMenuButton<String>(
-              onSelected: (String result) {
-                if (result == 'refrescar') {
-                  _refreshPCs();
-                }
-              },
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                const PopupMenuItem<String>(
-                  value: 'refrescar',
-                  child: ListTile(
-                    leading: Icon(Icons.refresh),
-                    title: Text('Refrescar lista'),
-                  ),
+          ),
+          PopupMenuButton<String>(
+            onSelected: (String result) {
+              if (result == 'refrescar') {
+                _refreshPCs();
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'refrescar',
+                child: ListTile(
+                  leading: Icon(Icons.refresh),
+                  title: Text('Refrescar lista'),
                 ),
-                PopupMenuItem<String>(
-                  // Opción para activar/desactivar la edición con un switch
-                  value: 'edicion',
-                  child: StatefulBuilder(
-                    builder: (BuildContext context, StateSetter setState) {
-                      return ListTile(
-                        leading: Icon(Icons.edit),
-                        title: const Text('Edición activa'),
-                        trailing: Switch(
-                          value: _isEditActive,
-                          onChanged: (bool newValue) {
-                            setState(() {
-                              _isEditActive = newValue;
-                            });
-                            Navigator.pop(
-                                context); // Cerrar el menú después de cambiar
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                
-                PopupMenuItem<String>(
-                  // Opción para activar/desactivar el marcado de filas con un switch
-                  value: 'señalar',
-                  child: StatefulBuilder(
-                    builder: (BuildContext context, StateSetter setState) {
-                      return ListTile(
-                        leading: Icon(Icons.drive_file_rename_outline),
-                        title: const Text('Señalar filas'),
-                        trailing: Switch(
-                          value: _isMarkingActive,
-                          onChanged: (bool newValue) {
-                            setState(() {
-                              _isMarkingActive = newValue;
-                            });
-                            Navigator.pop(context); // Cerrar el menú después de cambiar
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
+      ),
       body: FutureBuilder<List<InventarioPCs>>(
         future: _futureInventarios,
         builder: (context, snapshot) {
@@ -169,6 +114,11 @@ class _PCsHomeState extends State<PCsHome> {
             var inventarios = _inventariosFiltrados.isNotEmpty
                 ? _inventariosFiltrados
                 : snapshot.data!;
+            // Ordenar la lista por IP
+            inventarios.sort((a, b) {
+              // Asegúrate de que el campo `ip` no sea nulo
+              return (a.ip ?? '').compareTo(b.ip ?? '');
+            });
 
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -198,31 +148,110 @@ class _PCsHomeState extends State<PCsHome> {
                     DataColumn(label: Text('Programas y Licencias')),
                     DataColumn(label: Text('IP Restringidas')),
                     DataColumn(label: Text('Observaciones')),
+                    DataColumn(label: Text('Editar')),
                   ],
                   rows: inventarios.map((pc) {
+                    bool isEditing = _editingRows.contains(
+                        pc.idPc); // Verifica si la fila está en modo edición
                     return DataRow(
                       cells: [
-                        DataCell(Text(pc.idPc ?? 'N/A')),
-                        DataCell(Text(pc.marcaTemporal)),
-                        DataCell(Text(pc.unidad)),
-                        DataCell(Text(pc.nombreDeLaPc ?? 'Sin nombre')),
-                        DataCell(Text(pc.nombreDelFuncionario ?? 'N/A')),
-                        DataCell(Text(pc.puestoQueOcupa ?? 'N/A')),
-                        DataCell(Text(pc.ip ?? 'N/A')),
-                        DataCell(Text(pc.redConectada ?? 'N/A')),
-                        DataCell(Text(pc.nombreDeRed ?? 'N/A')),
-                        DataCell(Text(pc.dns1 ?? 'N/A')),
-                        DataCell(Text(pc.dns2 ?? 'N/A')),
-                        DataCell(Text(pc.sistemaOperativo ?? 'N/A')),
-                        DataCell(Text(pc.maquinaTodoEnUno ?? 'N/A')),
-                        DataCell(Text(pc.caracteristicas ?? 'N/A')),
-                        DataCell(Text(pc.laptop ?? 'N/A')),
-                        DataCell(Text(pc.codigoActFijos ?? 'N/A')),
-                        DataCell(Text(pc.estadoDeComputadora ?? 'N/A')),
-                        DataCell(Text(pc.dominio ?? 'N/A')),
-                        DataCell(Text(pc.programasLicencias ?? 'N/A')),
-                        DataCell(Text(pc.ipRestringidas ?? 'N/A')),
-                        DataCell(Text(pc.observaciones ?? 'N/A')),
+                        DataCell(isEditing
+                            ? TextFormField(initialValue: pc.idPc ?? 'N/A')
+                            : Text(pc.idPc ?? 'N/A')),
+                        DataCell(isEditing
+                            ? TextFormField(initialValue: pc.marcaTemporal)
+                            : Text(pc.marcaTemporal)),
+                        DataCell(isEditing
+                            ? TextFormField(initialValue: pc.unidad)
+                            : Text(pc.unidad)),
+                        DataCell(isEditing
+                            ? TextFormField(
+                                initialValue: pc.nombreDeLaPc ?? 'Sin nombre')
+                            : Text(pc.nombreDeLaPc ?? 'Sin nombre')),
+                        DataCell(isEditing
+                            ? TextFormField(
+                                initialValue: pc.nombreDelFuncionario ?? 'N/A')
+                            : Text(pc.nombreDelFuncionario ?? 'N/A')),
+                        DataCell(isEditing
+                            ? TextFormField(
+                                initialValue: pc.puestoQueOcupa ?? 'N/A')
+                            : Text(pc.puestoQueOcupa ?? 'N/A')),
+                        DataCell(isEditing
+                            ? TextFormField(initialValue: pc.ip ?? 'N/A')
+                            : Text(pc.ip ?? 'N/A')),
+                        DataCell(isEditing
+                            ? TextFormField(
+                                initialValue: pc.redConectada ?? 'N/A')
+                            : Text(pc.redConectada ?? 'N/A')),
+                        DataCell(isEditing
+                            ? TextFormField(
+                                initialValue: pc.nombreDeRed ?? 'N/A')
+                            : Text(pc.nombreDeRed ?? 'N/A')),
+                        DataCell(isEditing
+                            ? TextFormField(initialValue: pc.dns1 ?? 'N/A')
+                            : Text(pc.dns1 ?? 'N/A')),
+                        DataCell(isEditing
+                            ? TextFormField(initialValue: pc.dns2 ?? 'N/A')
+                            : Text(pc.dns2 ?? 'N/A')),
+                        DataCell(isEditing
+                            ? TextFormField(
+                                initialValue: pc.sistemaOperativo ?? 'N/A')
+                            : Text(pc.sistemaOperativo ?? 'N/A')),
+                        DataCell(isEditing
+                            ? TextFormField(
+                                initialValue: pc.maquinaTodoEnUno ?? 'N/A')
+                            : Text(pc.maquinaTodoEnUno ?? 'N/A')),
+                        DataCell(isEditing
+                            ? TextFormField(
+                                initialValue: pc.caracteristicas ?? 'N/A')
+                            : Text(pc.caracteristicas ?? 'N/A')),
+                        DataCell(isEditing
+                            ? TextFormField(initialValue: pc.laptop ?? 'N/A')
+                            : Text(pc.laptop ?? 'N/A')),
+                        DataCell(isEditing
+                            ? TextFormField(
+                                initialValue: pc.codigoActFijos ?? 'N/A')
+                            : Text(pc.codigoActFijos ?? 'N/A')),
+                        DataCell(isEditing
+                            ? TextFormField(
+                                initialValue: pc.estadoDeComputadora ?? 'N/A')
+                            : Text(pc.estadoDeComputadora ?? 'N/A')),
+
+                        DataCell(isEditing
+                            ? TextFormField(
+                                initialValue: pc.dominio ?? 'N/A')
+                            : Text(pc.dominio ?? 'N/A')),
+
+                        DataCell(isEditing
+                            ? TextFormField(
+                                initialValue: pc.programasLicencias ?? 'N/A')
+                            : Text(pc.programasLicencias ?? 'N/A')),
+
+                        DataCell(isEditing
+                            ? TextFormField(
+                                initialValue: pc.ipRestringidas ?? 'N/A')
+                            : Text(pc.ipRestringidas ?? 'N/A')),
+
+                         DataCell(isEditing
+                            ? TextFormField(
+                                initialValue: pc.observaciones ?? 'N/A')
+                            : Text(pc.observaciones ?? 'N/A')),
+                        // Botón para alternar entre modo de edición y visualización
+                        DataCell(
+                          IconButton(
+                            icon: Icon(isEditing ? Icons.save : Icons.edit),
+                            onPressed: () {
+                              setState(() {
+                                if (isEditing) {
+                                  _editingRows.remove(pc
+                                      .idPc); // Guardar cambios y desactivar edición
+                                } else {
+                                  _editingRows.add(pc.idPc!); // Activar edición
+                                }
+                              });
+                            },
+                          ),
+                        ),
                       ],
                     );
                   }).toList(),
