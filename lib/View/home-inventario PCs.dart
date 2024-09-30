@@ -18,6 +18,14 @@ class _PCsHomeState extends State<PCsHome> {
   final TextEditingController _searchController = TextEditingController();
   Timer? _debounce;
   List<String> _editingRows = []; // Lista para rastrear las filas en edición
+// Función para formatear la dirección IP
+  String _formatIP(String? ip) {
+    if (ip == null || ip.isEmpty) return '000.000.000.000'; // Manejar IPs nulas
+    return ip.split('.').map((octeto) {
+      return octeto.padLeft(
+          3, '0'); // Asegurarse de que cada octeto tenga al menos 3 dígitos
+    }).join('.');
+  }
 
   @override
   void initState() {
@@ -114,10 +122,11 @@ class _PCsHomeState extends State<PCsHome> {
             var inventarios = _inventariosFiltrados.isNotEmpty
                 ? _inventariosFiltrados
                 : snapshot.data!;
-            // Ordenar la lista por IP
+            // Ordenar la lista por IP como string formateado
             inventarios.sort((a, b) {
-              // Asegúrate de que el campo `ip` no sea nulo
-              return (a.ip ?? '').compareTo(b.ip ?? '');
+              String ipA = _formatIP(a.ip);
+              String ipB = _formatIP(b.ip);
+              return ipA.compareTo(ipB);
             });
 
             return SingleChildScrollView(
@@ -218,8 +227,7 @@ class _PCsHomeState extends State<PCsHome> {
                             : Text(pc.estadoDeComputadora ?? 'N/A')),
 
                         DataCell(isEditing
-                            ? TextFormField(
-                                initialValue: pc.dominio ?? 'N/A')
+                            ? TextFormField(initialValue: pc.dominio ?? 'N/A')
                             : Text(pc.dominio ?? 'N/A')),
 
                         DataCell(isEditing
@@ -232,7 +240,7 @@ class _PCsHomeState extends State<PCsHome> {
                                 initialValue: pc.ipRestringidas ?? 'N/A')
                             : Text(pc.ipRestringidas ?? 'N/A')),
 
-                         DataCell(isEditing
+                        DataCell(isEditing
                             ? TextFormField(
                                 initialValue: pc.observaciones ?? 'N/A')
                             : Text(pc.observaciones ?? 'N/A')),
