@@ -16,15 +16,19 @@ class _AgregarPCsState extends State<AgregarPCs> {
   // Controladores
   TextEditingController idPCCOntroller = TextEditingController();
   TextEditingController marcacontroller = TextEditingController();
-  TextEditingController NombrePCcontroller = TextEditingController();
-  TextEditingController IPcontroller = TextEditingController();
-  TextEditingController NombreFuncionariocontroller = TextEditingController();
+  TextEditingController nombrePCcontroller = TextEditingController();
+  TextEditingController ipController = TextEditingController();
+  TextEditingController nombreFuncionariocontroller = TextEditingController();
   TextEditingController puestoFuncionariocontroller = TextEditingController();
   TextEditingController dns1controller = TextEditingController();
   TextEditingController dns2controller = TextEditingController();
   TextEditingController sistemaOperativocontroller = TextEditingController();
-  TextEditingController CaracteristicasController = TextEditingController();
+  TextEditingController caracteristicasController = TextEditingController();
   TextEditingController codigoController = TextEditingController();
+  TextEditingController dominioController = TextEditingController();
+  TextEditingController programasLicenciasController = TextEditingController();
+  TextEditingController ipRestringidasController = TextEditingController();
+  TextEditingController observacionesController = TextEditingController();
 
   // Variables para Dropdowns
   String? unidadSeleccionada;
@@ -57,14 +61,16 @@ class _AgregarPCsState extends State<AgregarPCs> {
       String idPCFormatted = 'PC-${idPCCOntroller.text}';
       InventarioPCs nuevaPC = InventarioPCs(
         idPc: idPCFormatted,                              marcaTemporal: marcacontroller.text,
-        unidad: unidadSeleccionada!,                      ip: IPcontroller.text,
-        nombreDeLaPc: NombrePCcontroller.text,            nombreDelFuncionario: NombreFuncionariocontroller.text,
+        unidad: unidadSeleccionada!,                      ip: ipController.text,
+        nombreDeLaPc: nombrePCcontroller.text,            nombreDelFuncionario: nombreFuncionariocontroller.text,
         puestoQueOcupa: puestoFuncionariocontroller.text, redConectada: redConectadaSeleccionada!,
         nombreDeRed: nombreRedSeleccionada!,              dns1: dns1controller.text,
         dns2: dns2controller.text,                        sistemaOperativo: sistemaOperativocontroller.text,
-        maquinaTodoEnUno: maquinaTodoEnUnoSeleccionada!,  caracteristicas: CaracteristicasController.text,
-        laptop: laptopSeleccionada!,                      codigoActFijos: codigoController.text,
-        estadoDeComputadora: estadoPCSeleccionado!,
+        maquinaTodoEnUno: maquinaTodoEnUnoSeleccionada!,  caracteristicas: caracteristicasController.text,
+        laptop: laptopSeleccionada!,                           codigoActFijos: codigoController.text,
+        estadoDeComputadora: estadoPCSeleccionado!,            dominio: dominioController.text,
+        programasLicencias: programasLicenciasController.text, ipRestringidas: ipRestringidasController.text,
+        observaciones: observacionesController.text,
       );
       // Guardar los datos en Firestore usando el servicio
       await _inventarioService.guardarInventario(nuevaPC);
@@ -138,7 +144,7 @@ class _AgregarPCsState extends State<AgregarPCs> {
               const SizedBox(height: 10),
 
               TextFormField(
-                controller: NombrePCcontroller,
+                controller: nombrePCcontroller,
                 decoration: const InputDecoration(labelText: 'Nombre de la PC'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -150,7 +156,7 @@ class _AgregarPCsState extends State<AgregarPCs> {
               const SizedBox(height: 10),
 
               TextFormField(
-                controller: NombreFuncionariocontroller,
+                controller: nombreFuncionariocontroller,
                 decoration: const InputDecoration(labelText: 'Nombre del Fncionario'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -174,7 +180,7 @@ class _AgregarPCsState extends State<AgregarPCs> {
               ),
             const SizedBox(height: 10),
               TextFormField(
-                controller: IPcontroller,
+                controller: ipController,
                 decoration: const InputDecoration(labelText: 'IP'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -294,7 +300,7 @@ class _AgregarPCsState extends State<AgregarPCs> {
               const SizedBox(height: 10),
 
               TextFormField(
-                controller: CaracteristicasController,
+                controller: caracteristicasController,
                 decoration: const InputDecoration(labelText: 'Caracteristicas PC'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -364,6 +370,58 @@ class _AgregarPCsState extends State<AgregarPCs> {
                 },
               ),
               const SizedBox(height: 20),
+
+              TextFormField(
+                controller: dominioController,
+                decoration: const InputDecoration(labelText: 'Dominio'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor ingrese el dominio';
+                  }
+                  return null;
+                },
+              ),
+
+              const SizedBox(height: 10),
+
+              TextFormField(
+                controller: programasLicenciasController,
+                decoration: const InputDecoration(labelText: 'Programas y Licencias'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor ingrese los programas o licencias que contenga';
+                  }
+                  return null;
+                },
+              ),
+
+              const SizedBox(height: 10),
+
+              TextFormField(
+                controller: ipRestringidasController,
+                decoration: const InputDecoration(labelText: 'Ip Restringidas'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor ingrese si es IP restringida';
+                  }
+                  return null;
+                },
+              ),
+
+              const SizedBox(height: 10),
+
+              TextFormField(
+                controller: observacionesController,
+                decoration: const InputDecoration(labelText: 'Observaciones'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor ingrese Observaciones';
+                  }
+                  return null;
+                },
+              ),
+
+              const SizedBox(height: 10),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

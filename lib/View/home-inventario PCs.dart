@@ -145,8 +145,7 @@ class _PCsHomeState extends State<PCsHome> {
                             setState(() {
                               _isMarkingActive = newValue;
                             });
-                            Navigator.pop(
-                                context); // Cerrar el menú después de cambiar
+                            Navigator.pop(context); // Cerrar el menú después de cambiar
                           },
                         ),
                       );
@@ -195,6 +194,10 @@ class _PCsHomeState extends State<PCsHome> {
                     DataColumn(label: Text('Laptop')),
                     DataColumn(label: Text('Codigo ACT Fijos')),
                     DataColumn(label: Text('Estado de la Computadora')),
+                    DataColumn(label: Text('Dominio')),
+                    DataColumn(label: Text('Programas y Licencias')),
+                    DataColumn(label: Text('IP Restringidas')),
+                    DataColumn(label: Text('Observaciones')),
                   ],
                   rows: inventarios.map((pc) {
                     return DataRow(
@@ -216,6 +219,10 @@ class _PCsHomeState extends State<PCsHome> {
                         DataCell(Text(pc.laptop ?? 'N/A')),
                         DataCell(Text(pc.codigoActFijos ?? 'N/A')),
                         DataCell(Text(pc.estadoDeComputadora ?? 'N/A')),
+                        DataCell(Text(pc.dominio ?? 'N/A')),
+                        DataCell(Text(pc.programasLicencias ?? 'N/A')),
+                        DataCell(Text(pc.ipRestringidas ?? 'N/A')),
+                        DataCell(Text(pc.observaciones ?? 'N/A')),
                       ],
                     );
                   }).toList(),

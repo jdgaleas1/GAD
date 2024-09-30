@@ -45,6 +45,8 @@ class ImportarExportar {
             dns1: row[9]?.value.toString() ?? '', dns2: row[10]?.value.toString() ?? '', sistemaOperativo: row[11]?.value.toString() ?? '',
             maquinaTodoEnUno: row[12]?.value.toString() ?? '', caracteristicas: row[13]?.value.toString() ?? '',
             laptop: row[14]?.value.toString() ?? '', codigoActFijos: row[15]?.value.toString() ?? '', estadoDeComputadora: row[16]?.value.toString() ?? '',
+            dominio: row[17]?.value.toString() ?? '',  programasLicencias: row[18]?.value.toString() ?? '', ipRestringidas: row[19]?.value.toString() ?? '', 
+            observaciones: row[20]?.value.toString() ?? '',
           );
 
           // Guardar cada fila en Firestore
@@ -72,7 +74,9 @@ class ImportarExportar {
       'NOMBRE DE RED',          'DNS-1',
       'DNS-2',                  'SISTEMA OPERATIVO',
       'MAQUINA TODO EN UNO',    'CARACTERISTICAS',
-      'LAPTOP',                 'CODIGO ACT FIJOS',        'ESTADO DE COMPUTADORA'
+      'LAPTOP',                 'CODIGO ACT FIJOS',        
+      'ESTADO DE COMPUTADORA',  'Dominio',                
+      'Programas y Licencias',  'IP restringidas',         'Observaciones'      
     ]);
 
     // Llenar las filas con los datos del inventario
@@ -85,7 +89,9 @@ class ImportarExportar {
         inventario.nombreDeRed ?? '',         inventario.dns1 ?? '',
         inventario.dns2 ?? '',                inventario.sistemaOperativo ?? '',    
         inventario.maquinaTodoEnUno ?? '',    inventario.caracteristicas ?? '',
-        inventario.laptop ?? '',              inventario.codigoActFijos ?? '',         inventario.estadoDeComputadora ?? '',
+        inventario.laptop ?? '',              inventario.codigoActFijos ?? '',         
+        inventario.estadoDeComputadora ?? '', inventario.dominio ?? '',
+        inventario.programasLicencias ?? '',  inventario.ipRestringidas ?? '',        inventario.observaciones ?? '',
       ]);
     }
     // Obtener el directorio de Descargas

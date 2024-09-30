@@ -24,8 +24,12 @@ class InventarioPCs {
   String laptop;
   String codigoActFijos;
   String estadoDeComputadora;
+  String dominio;
+  String programasLicencias;
+  String ipRestringidas;
+  String observaciones;
 
-  InventarioPCs({
+  InventarioPCs({         
     required this.idPc,
     required this.marcaTemporal,
     required this.unidad,
@@ -43,11 +47,14 @@ class InventarioPCs {
     required this.laptop,
     required this.codigoActFijos,
     required this.estadoDeComputadora,
+    required this.dominio,
+    required this.programasLicencias,
+    required this.ipRestringidas,
+    required this.observaciones,
   });
 
   factory InventarioPCs.fromJson(Map<String, dynamic> json) => InventarioPCs(
-        idPc: json["idPC"] ??
-            '', // Si el campo es null, se asigna una cadena vacía
+        idPc: json["idPC"] ??'', // Si el campo es null, se asigna una cadena vacía
         marcaTemporal: json["Marca temporal"] ?? '',
         unidad: json["Unidad"] ?? '',
         ip: json["IP"] ?? '',
@@ -64,6 +71,10 @@ class InventarioPCs {
         laptop: json["LAPTOP"] ?? '',
         codigoActFijos: json["CODIGO ACT FIJOS"] ?? '',
         estadoDeComputadora: json["ESTADO DE COMPUTADORA"] ?? '',
+        dominio: json["Dominio"] ?? '',
+        programasLicencias: json["Programas y Licencia"] ?? '',
+        ipRestringidas: json["IP restringidas"] ?? '',
+        observaciones: json["Observaciones"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -84,5 +95,9 @@ class InventarioPCs {
         "LAPTOP": laptop,
         "CODIGO ACT FIJOS": codigoActFijos,
         "ESTADO DE COMPUTADORA": estadoDeComputadora,
+        "Dominio": dominio,
+        "Programas y Licencia": programasLicencias,
+        "IP restringidas": ipRestringidas,
+        "Observaciones":observaciones,
       };
 }
