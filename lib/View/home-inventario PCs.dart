@@ -149,6 +149,8 @@ class _PCsHomeState extends State<PCsHome> {
                     DataColumn(label: Text('IP Restringidas')),
                     DataColumn(label: Text('Observaciones')),
                     DataColumn(label: Text('Editar')),
+                    DataColumn(label: Text('Eliminar')),
+
                   ],
                   rows: inventarios.map((pc) {
                     bool isEditing = _editingRows.contains(
@@ -238,20 +240,82 @@ class _PCsHomeState extends State<PCsHome> {
                             : Text(pc.observaciones ?? 'N/A')),
                         // Botón para alternar entre modo de edición y visualización
                         DataCell(
-                          IconButton(
-                            icon: Icon(isEditing ? Icons.save : Icons.edit),
-                            onPressed: () {
-                              setState(() {
-                                if (isEditing) {
-                                  _editingRows.remove(pc
-                                      .idPc); // Guardar cambios y desactivar edición
-                                } else {
-                                  _editingRows.add(pc.idPc!); // Activar edición
-                                }
-                              });
-                            },
-                          ),
-                        ),
+                              IconButton(
+                                icon: Icon(isEditing ? Icons.save : Icons.edit),
+                                onPressed: () {
+                                  if (isEditing) {
+                                    // Preparar los datos modificados
+                                    Map<String, dynamic> updatedData = {
+                                      'marcaTemporal': pc.marcaTemporal,
+                                      'unidad': pc.unidad,
+                                      'nombreDeLaPc': pc.nombreDeLaPc,
+                                      'nombreDelFuncionario': pc.nombreDelFuncionario,
+                                      'puestoQueOcupa': pc.puestoQueOcupa,
+                                      'ip': pc.ip,
+                                      'redConectada': pc.redConectada,
+                                      'nombreDeRed': pc.nombreDeRed,
+                                      'dns1': pc.dns1,
+                                      'dns2': pc.dns2,
+                                      'sistemaOperativo': pc.sistemaOperativo,
+                                      'maquinaTodoEnUno': pc.maquinaTodoEnUno,
+                                      'caracteristicas': pc.caracteristicas,
+                                      'laptop': pc.laptop,
+                                      'codigoActFijos': pc.codigoActFijos,
+                                      'estadoDeComputadora': pc.estadoDeComputadora,
+                                      'dominio': pc.dominio,
+                                      'programasLicencias': pc.programasLicencias,
+                                      'ipRestringidas': pc.ipRestringidas,
+                                      'observaciones': pc.observaciones,
+                                    };
+
+                                    // Guardar los cambios en Firestore
+                                    _inventarioService.editarPC(pc.idPc, updatedData);
+                                  }
+
+                                  setState(() {
+                                    if (isEditing) {
+                                      _editingRows.remove(pc.idPc); // Desactivar edición
+                                    } else {
+                                      _editingRows.add(pc.idPc!); // Activar edición
+                                    }
+                                  });
+                                },
+                              ),
+                            ),
+                            DataCell(
+                                  IconButton(
+                                    icon: Icon(Icons.delete),
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text("Confirmar eliminación"),
+                                            content: Text("¿Estás seguro de que deseas eliminar este PC?"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop(); // Cerrar el diálogo
+                                                },
+                                                child: Text("Cancelar"),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  _inventarioService.eliminarPC(pc.idPc!);
+                                                  _refreshPCs(); // Refrescar la lista después de eliminar
+                                                  Navigator.of(context).pop(); // Cerrar el diálogo
+                                                },
+                                                child: Text("Eliminar"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+
+
                       ],
                     );
                   }).toList(),

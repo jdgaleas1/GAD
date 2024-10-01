@@ -3,27 +3,27 @@ import 'package:gad/Model/Inventario-PC-model.dart';
 
 class InventarioService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String collectionName = "Inventario-PCs";
+  final String collectionName = "prueba";
 
   // Método para guardar un inventario en Firestore
 Future<void> guardarInventario(InventarioPCs inventario) async {
   try {
-    // Convertir el objeto InventarioPCs a JSON
     Map<String, dynamic> inventarioData = inventario.toJson();
 
-    // Guardar el inventario en Firestore sin especificar el ID (se generará automáticamente)
-    await _firestore
-        .collection(collectionName)
-        .add(inventarioData);
+    // Usar un ID personalizado
+    String customId = inventario.idPc;
 
-    print("Inventario guardado con éxito");
+    // Usar `set()` con el ID personalizado
+    await _firestore.collection(collectionName).doc(customId).set(inventarioData);
+
+    print("Inventario guardado con éxito con ID personalizado: $customId");
   } catch (e) {
     print("Error al guardar el inventario: $e");
   }
 }
 
 
-  Future<List<InventarioPCs>> obtenerInventario() async {
+Future<List<InventarioPCs>> obtenerInventario() async {
     try {
       // Consulta todos los documentos en la colección "Inventario-PCs"
       QuerySnapshot querySnapshot =
@@ -38,6 +38,25 @@ Future<void> guardarInventario(InventarioPCs inventario) async {
     } catch (e) {
       print("Error al obtener el inventario: $e");
       return [];
+    }
+  }
+  // Método para editar un inventario en Firestore
+  Future<void> editarPC(String idPC, Map<String, dynamic> data) async {
+    try {
+      await _firestore.collection(collectionName).doc(idPC).update(data);
+      print("PC actualizada exitosamente.");
+    } catch (e) {
+      print('Error al actualizar el inventario: $e');
+    }
+  }
+
+  // Método para eliminar un inventario de Firestore
+  Future<void> eliminarPC(String idPC) async {
+    try {
+      await _firestore.collection(collectionName).doc(idPC).delete();
+      print("PC eliminada exitosamente.");
+    } catch (e) {
+      print('Error al eliminar el inventario: $e');
     }
   }
 }
