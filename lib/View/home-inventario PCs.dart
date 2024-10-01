@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:gad/View/Inventario-PCS.dart';
 import 'package:gad/Service/Inventario-PC-Servicio.dart';
 import 'package:gad/Model/Inventario-PC-model.dart';
 
@@ -17,13 +16,13 @@ class _PCsHomeState extends State<PCsHome> {
   final InventarioService _inventarioService = InventarioService();
   final TextEditingController _searchController = TextEditingController();
   Timer? _debounce;
-  List<String> _editingRows = []; // Lista para rastrear las filas en edición
-// Función para formatear la dirección IP
+  List<String> _editingRows = [];
+
+  // Función para formatear la dirección IP
   String _formatIP(String? ip) {
-    if (ip == null || ip.isEmpty) return '000.000.000.000'; // Manejar IPs nulas
+    if (ip == null || ip.isEmpty) return '000.000.000.000';
     return ip.split('.').map((octeto) {
-      return octeto.padLeft(
-          3, '0'); // Asegurarse de que cada octeto tenga al menos 3 dígitos
+      return octeto.padLeft(3, '0');
     }).join('.');
   }
 
@@ -122,7 +121,6 @@ class _PCsHomeState extends State<PCsHome> {
             var inventarios = _inventariosFiltrados.isNotEmpty
                 ? _inventariosFiltrados
                 : snapshot.data!;
-            // Ordenar la lista por IP como string formateado
             inventarios.sort((a, b) {
               String ipA = _formatIP(a.ip);
               String ipB = _formatIP(b.ip);
@@ -162,166 +160,224 @@ class _PCsHomeState extends State<PCsHome> {
 
                   ],
                   rows: inventarios.map((pc) {
-                    bool isEditing = _editingRows.contains(
-                        pc.idPc); // Verifica si la fila está en modo edición
+                    bool isEditing = _editingRows.contains(pc.idPc);
+
                     return DataRow(
                       cells: [
                         DataCell(isEditing
-                            ? TextFormField(initialValue: pc.idPc ?? 'N/A')
+                            ? TextFormField(
+                                initialValue: pc.idPc ?? 'N/A',
+                                onChanged: (value) {
+                                  pc.idPc = value;
+                                },
+                              )
                             : Text(pc.idPc ?? 'N/A')),
                         DataCell(isEditing
-                            ? TextFormField(initialValue: pc.marcaTemporal)
+                            ? TextFormField(
+                                initialValue: pc.marcaTemporal,
+                                onChanged: (value) {
+                                  pc.marcaTemporal = value;
+                                },
+                              )
                             : Text(pc.marcaTemporal)),
                         DataCell(isEditing
-                            ? TextFormField(initialValue: pc.unidad)
+                            ? TextFormField(
+                                initialValue: pc.unidad,
+                                onChanged: (value) {
+                                  pc.unidad = value;
+                                },
+                              )
                             : Text(pc.unidad)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.nombreDeLaPc ?? 'Sin nombre')
+                                initialValue: pc.nombreDeLaPc ?? 'Sin nombre',
+                                onChanged: (value) {
+                                  pc.nombreDeLaPc = value;
+                                },
+                              )
                             : Text(pc.nombreDeLaPc ?? 'Sin nombre')),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.nombreDelFuncionario ?? 'N/A')
+                                initialValue: pc.nombreDelFuncionario ?? 'N/A',
+                                onChanged: (value) {
+                                  pc.nombreDelFuncionario = value;
+                                },
+                              )
                             : Text(pc.nombreDelFuncionario ?? 'N/A')),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.puestoQueOcupa ?? 'N/A')
+                                initialValue: pc.puestoQueOcupa ?? 'N/A',
+                                onChanged: (value) {
+                                  pc.puestoQueOcupa = value;
+                                },
+                              )
                             : Text(pc.puestoQueOcupa ?? 'N/A')),
                         DataCell(isEditing
-                            ? TextFormField(initialValue: pc.ip ?? 'N/A')
+                            ? TextFormField(
+                                initialValue: pc.ip ?? 'N/A',
+                                onChanged: (value) {
+                                  pc.ip = value;
+                                },
+                              )
                             : Text(pc.ip ?? 'N/A')),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.redConectada ?? 'N/A')
+                                initialValue: pc.redConectada ?? 'N/A',
+                                onChanged: (value) {
+                                  pc.redConectada = value;
+                                },
+                              )
                             : Text(pc.redConectada ?? 'N/A')),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.nombreDeRed ?? 'N/A')
+                                initialValue: pc.nombreDeRed ?? 'N/A',
+                                onChanged: (value) {
+                                  pc.nombreDeRed = value;
+                                },
+                              )
                             : Text(pc.nombreDeRed ?? 'N/A')),
                         DataCell(isEditing
-                            ? TextFormField(initialValue: pc.dns1 ?? 'N/A')
+                            ? TextFormField(
+                                initialValue: pc.dns1 ?? 'N/A',
+                                onChanged: (value) {
+                                  pc.dns1 = value;
+                                },
+                              )
                             : Text(pc.dns1 ?? 'N/A')),
                         DataCell(isEditing
-                            ? TextFormField(initialValue: pc.dns2 ?? 'N/A')
+                            ? TextFormField(
+                                initialValue: pc.dns2 ?? 'N/A',
+                                onChanged: (value) {
+                                  pc.dns2 = value;
+                                },
+                              )
                             : Text(pc.dns2 ?? 'N/A')),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.sistemaOperativo ?? 'N/A')
+                                initialValue: pc.sistemaOperativo ?? 'N/A',
+                                onChanged: (value) {
+                                  pc.sistemaOperativo = value;
+                                },
+                              )
                             : Text(pc.sistemaOperativo ?? 'N/A')),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.maquinaTodoEnUno ?? 'N/A')
+                                initialValue: pc.maquinaTodoEnUno ?? 'N/A',
+                                onChanged: (value) {
+                                  pc.maquinaTodoEnUno = value;
+                                },
+                              )
                             : Text(pc.maquinaTodoEnUno ?? 'N/A')),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.caracteristicas ?? 'N/A')
+                                initialValue: pc.caracteristicas ?? 'N/A',
+                                onChanged: (value) {
+                                  pc.caracteristicas = value;
+                                },
+                              )
                             : Text(pc.caracteristicas ?? 'N/A')),
                         DataCell(isEditing
-                            ? TextFormField(initialValue: pc.laptop ?? 'N/A')
+                            ? TextFormField(
+                                initialValue: pc.laptop ?? 'N/A',
+                                onChanged: (value) {
+                                  pc.laptop = value;
+                                },
+                              )
                             : Text(pc.laptop ?? 'N/A')),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.codigoActFijos ?? 'N/A')
+                                initialValue: pc.codigoActFijos ?? 'N/A',
+                                onChanged: (value) {
+                                  pc.codigoActFijos = value;
+                                },
+                              )
                             : Text(pc.codigoActFijos ?? 'N/A')),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.estadoDeComputadora ?? 'N/A')
+                                initialValue: pc.estadoDeComputadora ?? 'N/A',
+                                onChanged: (value) {
+                                  pc.estadoDeComputadora = value;
+                                },
+                              )
                             : Text(pc.estadoDeComputadora ?? 'N/A')),
-
                         DataCell(isEditing
                             ? TextFormField(initialValue: pc.dominio ?? 'N/A')
                             : Text(pc.dominio ?? 'N/A')),
-
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.programasLicencias ?? 'N/A')
+                                initialValue: pc.programasLicencias ?? 'N/A',
+                                onChanged: (value) {
+                                  pc.programasLicencias = value;
+                                },
+                              )
                             : Text(pc.programasLicencias ?? 'N/A')),
-
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.ipRestringidas ?? 'N/A')
+                                initialValue: pc.ipRestringidas ?? 'N/A',
+                                onChanged: (value) {
+                                  pc.ipRestringidas = value;
+                                },
+                              )
                             : Text(pc.ipRestringidas ?? 'N/A')),
-
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.observaciones ?? 'N/A')
+                                initialValue: pc.observaciones ?? 'N/A',
+                                onChanged: (value) {
+                                  pc.observaciones = value;
+                                },
+                              )
                             : Text(pc.observaciones ?? 'N/A')),
-                        // Botón para alternar entre modo de edición y visualización
+                        DataCell(
+                          IconButton(
+                            icon: isEditing
+                                ? const Icon(Icons.save)
+                                : const Icon(Icons.edit),
+                            onPressed: () async {
+                              setState(() {
+                                if (isEditing) {
+                                  // Actualiza el inventario en Firestore
+                                  _inventarioService.actualizarInventario(pc);
+                                  _editingRows.remove(pc.idPc);
+                                } else {
+                                  _editingRows.add(pc.idPc!);
+                                }
+                              });
+                            },
+                          ),
+                        ),
                         DataCell(
                               IconButton(
-                                icon: Icon(isEditing ? Icons.save : Icons.edit),
+                                icon: Icon(Icons.delete),
                                 onPressed: () {
-                                  if (isEditing) {
-                                    // Preparar los datos modificados
-                                    Map<String, dynamic> updatedData = {
-                                      'marcaTemporal': pc.marcaTemporal,
-                                      'unidad': pc.unidad,
-                                      'nombreDeLaPc': pc.nombreDeLaPc,
-                                      'nombreDelFuncionario': pc.nombreDelFuncionario,
-                                      'puestoQueOcupa': pc.puestoQueOcupa,
-                                      'ip': pc.ip,
-                                      'redConectada': pc.redConectada,
-                                      'nombreDeRed': pc.nombreDeRed,
-                                      'dns1': pc.dns1,
-                                      'dns2': pc.dns2,
-                                      'sistemaOperativo': pc.sistemaOperativo,
-                                      'maquinaTodoEnUno': pc.maquinaTodoEnUno,
-                                      'caracteristicas': pc.caracteristicas,
-                                      'laptop': pc.laptop,
-                                      'codigoActFijos': pc.codigoActFijos,
-                                      'estadoDeComputadora': pc.estadoDeComputadora,
-                                      'dominio': pc.dominio,
-                                      'programasLicencias': pc.programasLicencias,
-                                      'ipRestringidas': pc.ipRestringidas,
-                                      'observaciones': pc.observaciones,
-                                    };
-
-                                    // Guardar los cambios en Firestore
-                                    _inventarioService.editarPC(pc.idPc, updatedData);
-                                  }
-
-                                  setState(() {
-                                    if (isEditing) {
-                                      _editingRows.remove(pc.idPc); // Desactivar edición
-                                    } else {
-                                      _editingRows.add(pc.idPc!); // Activar edición
-                                    }
-                                  });
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text("Confirmar eliminación"),
+                                        content: Text("¿Estás seguro de que deseas eliminar este PC?"),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop(); // Cerrar el diálogo
+                                            },
+                                            child: Text("Cancelar"),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              _inventarioService.eliminarPC(pc.idPc!);
+                                              _refreshPCs(); // Refrescar la lista después de eliminar
+                                              Navigator.of(context).pop(); // Cerrar el diálogo
+                                            },
+                                            child: Text("Eliminar"),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
                                 },
                               ),
                             ),
-                            DataCell(
-                                  IconButton(
-                                    icon: Icon(Icons.delete),
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: Text("Confirmar eliminación"),
-                                            content: Text("¿Estás seguro de que deseas eliminar este PC?"),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop(); // Cerrar el diálogo
-                                                },
-                                                child: Text("Cancelar"),
-                                              ),
-                                              TextButton(
-                                                onPressed: () {
-                                                  _inventarioService.eliminarPC(pc.idPc!);
-                                                  _refreshPCs(); // Refrescar la lista después de eliminar
-                                                  Navigator.of(context).pop(); // Cerrar el diálogo
-                                                },
-                                                child: Text("Eliminar"),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    },
-                                  ),
-                                ),
+
 
 
                       ],
@@ -332,18 +388,6 @@ class _PCsHomeState extends State<PCsHome> {
             );
           }
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          bool? result = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AgregarPCs()),
-          );
-          if (result == true) {
-            _refreshPCs();
-          }
-        },
-        child: const Icon(Icons.add),
       ),
     );
   }

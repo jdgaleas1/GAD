@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:gad/Model/Temas-Estados.dart';
+import 'package:gad/View/Inventario-PCS.dart';
 import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -54,10 +55,13 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.fact_check),
             title: Text('Inventario Nuevo'),
-            onTap: () {
-              onItemTapped(0);
-              Navigator.pop(context);
-            },
+              onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AgregarPCs()),
+                    );
+
+              },
           ),
           // El nuevo ExpansionTile para Importar/Exportar
           ExpansionTile(

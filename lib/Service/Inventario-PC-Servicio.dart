@@ -3,7 +3,7 @@ import 'package:gad/Model/Inventario-PC-model.dart';
 
 class InventarioService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String collectionName = "prueba";
+  final String collectionName = "Inventario-PCs";
 
   // Método para guardar un inventario en Firestore
 Future<void> guardarInventario(InventarioPCs inventario) async {
@@ -40,13 +40,26 @@ Future<List<InventarioPCs>> obtenerInventario() async {
       return [];
     }
   }
-  // Método para editar un inventario en Firestore
-  Future<void> editarPC(String idPC, Map<String, dynamic> data) async {
+// Método para actualizar un inventario existente en Firestore
+  Future<void> actualizarInventario(InventarioPCs inventario) async {
     try {
-      await _firestore.collection(collectionName).doc(idPC).update(data);
-      print("PC actualizada exitosamente.");
+      // Verificar que el ID no sea nulo
+      if (inventario.idPc == null) {
+        throw Exception("El ID del inventario no puede ser nulo.");
+      }
+
+      // Convertir el objeto InventarioPCs a JSON
+      Map<String, dynamic> inventarioData = inventario.toJson();
+
+      // Actualizar el inventario en Firestore usando el ID del documento
+      await _firestore
+          .collection(collectionName)
+          .doc(inventario.idPc) // Utiliza el ID para identificar el documento
+          .update(inventarioData);
+
+      print("Inventario actualizado con éxito");
     } catch (e) {
-      print('Error al actualizar el inventario: $e');
+      print("Error al actualizar el inventario: $e");
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gad/Model/Temas-Estados.dart';
 import 'package:gad/Service/importar-exportar.dart';
 import 'package:gad/View/Drawer.dart';
+import 'package:gad/View/Inventario-PCS.dart';
 import 'package:gad/View/home-inventario%20PCs.dart';
 import 'package:gad/firebase_options.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // Inicialización de los contenidos de las pestañas
     _content = [
       PCsHome (),
-      Center(child: Text('Reservas Hechas')),
+
     ];
   }
 
