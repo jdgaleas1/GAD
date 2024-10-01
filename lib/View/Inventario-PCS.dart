@@ -29,6 +29,8 @@ class _AgregarPCsState extends State<AgregarPCs> {
   TextEditingController programasLicenciasController = TextEditingController();
   TextEditingController ipRestringidasController = TextEditingController();
   TextEditingController observacionesController = TextEditingController();
+  TextEditingController unidadOtraController = TextEditingController();
+  TextEditingController nombreRedOtraController = TextEditingController();
 
   // Variables para Dropdowns
   String? unidadSeleccionada;
@@ -39,14 +41,43 @@ class _AgregarPCsState extends State<AgregarPCs> {
   String? estadoPCSeleccionado;
 
   // Listas para Dropdowns
-  List<String> unidades = ['Fiscalización', 'Obras Públicas', 'Contabilidad', 'Inventario y Activos Fijos', 'Unidad de Presupuesto',
-    'Gestión Financiera', 'Unidad de Comunicación', 'Comunicación-La Radio', 'Talleres', 'Contabilidad-Patronato', 'Salud Ocupacional',
-    'Unidad Administrativas', 'Planificación', 'Bodegas', 'Riego y Drenaje', 'Tesorería', 'Secretaría General', 'Viceprefectura', 'Archivo',
-    'Jurídico', 'Prefectura', 'Fomento Productivo', 'Casa de Exposiciones', 'Compras Públicas', 'Talento Humano', 'Gestión de Riesgos', 'La Maná',
+  List<String> unidades = [
+    'Fiscalización',
+    'Obras Públicas',
+    'Contabilidad',
+    'Inventario y Activos Fijos',
+    'Unidad de Presupuesto',
+    'Gestión Financiera',
+    'Unidad de Comunicación',
+    'Comunicación-La Radio',
+    'Talleres',
+    'Contabilidad-Patronato',
+    'Salud Ocupacional',
+    'Unidad Administrativas',
+    'Planificación',
+    'Bodegas',
+    'Riego y Drenaje',
+    'Tesorería',
+    'Secretaría General',
+    'Viceprefectura',
+    'Archivo',
+    'Jurídico',
+    'Prefectura',
+    'Fomento Productivo',
+    'Casa de Exposiciones',
+    'Compras Públicas',
+    'Talento Humano',
+    'Gestión de Riesgos',
+    'La Maná',
   ];
 
   List<String> redConectadas = ['LAN(ETHERNET)', 'WAN(Wifi)'];
-  List<String> nombreReds = ['GADCOTOPAXI', 'INVITADOS GADCOTOPAXI', 'Red', 'Sin Red'];
+  List<String> nombreReds = [
+    'GADCOTOPAXI',
+    'INVITADOS GADCOTOPAXI',
+    'Red',
+    'Sin Red'
+  ];
   List<String> maquinaTodoEnUnoOpciones = ['Si', 'No'];
   List<String> laptopOpciones = ['Si', 'No'];
   List<String> estadoPCOpciones = ['Buena', 'Regular', 'Mala'];
@@ -57,19 +88,33 @@ class _AgregarPCsState extends State<AgregarPCs> {
   // Método para guardar los datos en la base de datos
   _guardarPC() async {
     if (_formKey.currentState!.validate()) {
-              // Aquí agregamos el prefijo "PC-" al número ingresado
+      // Aquí agregamos el prefijo "PC-" al número ingresado
       String idPCFormatted = 'PC-${idPCCOntroller.text}';
       InventarioPCs nuevaPC = InventarioPCs(
-        idPc: idPCFormatted,                              marcaTemporal: marcacontroller.text,
-        unidad: unidadSeleccionada!,                      ip: ipController.text,
-        nombreDeLaPc: nombrePCcontroller.text,            nombreDelFuncionario: nombreFuncionariocontroller.text,
-        puestoQueOcupa: puestoFuncionariocontroller.text, redConectada: redConectadaSeleccionada!,
-        nombreDeRed: nombreRedSeleccionada!,              dns1: dns1controller.text,
-        dns2: dns2controller.text,                        sistemaOperativo: sistemaOperativocontroller.text,
-        maquinaTodoEnUno: maquinaTodoEnUnoSeleccionada!,  caracteristicas: caracteristicasController.text,
-        laptop: laptopSeleccionada!,                           codigoActFijos: codigoController.text,
-        estadoDeComputadora: estadoPCSeleccionado!,            dominio: dominioController.text,
-        programasLicencias: programasLicenciasController.text, ipRestringidas: ipRestringidasController.text,
+        idPc: idPCFormatted,
+        marcaTemporal: marcacontroller.text,
+        unidad: unidadSeleccionada == 'Otra'
+            ? unidadOtraController.text
+            : unidadSeleccionada!,
+        ip: ipController.text,
+        nombreDeLaPc: nombrePCcontroller.text,
+        nombreDelFuncionario: nombreFuncionariocontroller.text,
+        puestoQueOcupa: puestoFuncionariocontroller.text,
+        redConectada: redConectadaSeleccionada!,
+        nombreDeRed: nombreRedSeleccionada == 'Otra'
+            ? nombreRedOtraController.text
+            : nombreRedSeleccionada!,
+        dns1: dns1controller.text,
+        dns2: dns2controller.text,
+        sistemaOperativo: sistemaOperativocontroller.text,
+        maquinaTodoEnUno: maquinaTodoEnUnoSeleccionada!,
+        caracteristicas: caracteristicasController.text,
+        laptop: laptopSeleccionada!,
+        codigoActFijos: codigoController.text,
+        estadoDeComputadora: estadoPCSeleccionado!,
+        dominio: dominioController.text,
+        programasLicencias: programasLicenciasController.text,
+        ipRestringidas: ipRestringidasController.text,
         observaciones: observacionesController.text,
       );
       // Guardar los datos en Firestore usando el servicio
@@ -95,17 +140,18 @@ class _AgregarPCsState extends State<AgregarPCs> {
           key: _formKey,
           child: ListView(
             children: [
-                    TextFormField(
-                      controller: idPCCOntroller,
-                      decoration: const InputDecoration(labelText: 'ID PC'),
-                      keyboardType: TextInputType.number, // Tipo de teclado solo numérico
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor ingrese un id/numero que identifique esa PC';
-                        }
-                        return null;
-                      },
-                    ),
+              TextFormField(
+                controller: idPCCOntroller,
+                decoration: const InputDecoration(labelText: 'ID PC'),
+                keyboardType:
+                    TextInputType.number, // Tipo de teclado solo numérico
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor ingrese un id/numero que identifique esa PC';
+                  }
+                  return null;
+                },
+              ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: marcacontroller,
@@ -119,16 +165,22 @@ class _AgregarPCsState extends State<AgregarPCs> {
               ),
               const SizedBox(height: 10),
 
-              // Unidad Dropdown
+              // Unidad Dropdown con opción de "Otra"
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Unidad'),
                 value: unidadSeleccionada,
-                items: unidades.map((String unidad) {
-                  return DropdownMenuItem<String>(
-                    value: unidad,
-                    child: Text(unidad),
-                  );
-                }).toList(),
+                items: [
+                  ...unidades.map((String unidad) {
+                    return DropdownMenuItem<String>(
+                      value: unidad,
+                      child: Text(unidad),
+                    );
+                  }).toList(),
+                  const DropdownMenuItem<String>(
+                    value: 'Otra',
+                    child: Text('Otra'),
+                  ),
+                ],
                 onChanged: (newValue) {
                   setState(() {
                     unidadSeleccionada = newValue;
@@ -141,6 +193,19 @@ class _AgregarPCsState extends State<AgregarPCs> {
                   return null;
                 },
               ),
+              if (unidadSeleccionada == 'Otra')
+                TextFormField(
+                  controller: unidadOtraController,
+                  decoration: const InputDecoration(
+                      labelText: 'Especifique otra Unidad'),
+                  validator: (value) {
+                    if (unidadSeleccionada == 'Otra' &&
+                        (value == null || value.isEmpty)) {
+                      return 'Por favor ingrese la otra Unidad';
+                    }
+                    return null;
+                  },
+                ),
               const SizedBox(height: 10),
 
               TextFormField(
@@ -157,7 +222,8 @@ class _AgregarPCsState extends State<AgregarPCs> {
 
               TextFormField(
                 controller: nombreFuncionariocontroller,
-                decoration: const InputDecoration(labelText: 'Nombre del Fncionario'),
+                decoration:
+                    const InputDecoration(labelText: 'Nombre del Fncionario'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor ingrese el Nombre del Funcionario';
@@ -167,10 +233,10 @@ class _AgregarPCsState extends State<AgregarPCs> {
               ),
               const SizedBox(height: 10),
 
-
               TextFormField(
                 controller: puestoFuncionariocontroller,
-                decoration: const InputDecoration(labelText: 'Puesto que Ocupa'),
+                decoration:
+                    const InputDecoration(labelText: 'Puesto que Ocupa'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor ingrese el Puesto que Ocupa';
@@ -178,7 +244,7 @@ class _AgregarPCsState extends State<AgregarPCs> {
                   return null;
                 },
               ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: ipController,
                 decoration: const InputDecoration(labelText: 'IP'),
@@ -215,16 +281,22 @@ class _AgregarPCsState extends State<AgregarPCs> {
               ),
               const SizedBox(height: 10),
 
-              // Nombre de Red Dropdown
+              // Nombre de la Red Dropdown con opción de "Otra"
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Nombre de Red'),
                 value: nombreRedSeleccionada,
-                items: nombreReds.map((String red) {
-                  return DropdownMenuItem<String>(
-                    value: red,
-                    child: Text(red),
-                  );
-                }).toList(),
+                items: [
+                  ...nombreReds.map((String red) {
+                    return DropdownMenuItem<String>(
+                      value: red,
+                      child: Text(red),
+                    );
+                  }).toList(),
+                  const DropdownMenuItem<String>(
+                    value: 'Otra',
+                    child: Text('Otra'),
+                  ),
+                ],
                 onChanged: (newValue) {
                   setState(() {
                     nombreRedSeleccionada = newValue;
@@ -237,6 +309,19 @@ class _AgregarPCsState extends State<AgregarPCs> {
                   return null;
                 },
               ),
+              if (nombreRedSeleccionada == 'Otra')
+                TextFormField(
+                  controller: nombreRedOtraController,
+                  decoration:
+                      const InputDecoration(labelText: 'Especifique otra Red'),
+                  validator: (value) {
+                    if (nombreRedSeleccionada == 'Otra' &&
+                        (value == null || value.isEmpty)) {
+                      return 'Por favor ingrese el otro Nombre de Red';
+                    }
+                    return null;
+                  },
+                ),
               const SizedBox(height: 10),
 
               TextFormField(
@@ -265,7 +350,8 @@ class _AgregarPCsState extends State<AgregarPCs> {
 
               TextFormField(
                 controller: sistemaOperativocontroller,
-                decoration: const InputDecoration(labelText: 'Sistema Operativo'),
+                decoration:
+                    const InputDecoration(labelText: 'Sistema Operativo'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor ingrese el Sistema Operativo';
@@ -277,7 +363,8 @@ class _AgregarPCsState extends State<AgregarPCs> {
 
               // Maquina Todo en Uno Dropdown
               DropdownButtonFormField<String>(
-                decoration: const InputDecoration(labelText: 'Maquina Todo en Uno'),
+                decoration:
+                    const InputDecoration(labelText: 'Maquina Todo en Uno'),
                 value: maquinaTodoEnUnoSeleccionada,
                 items: maquinaTodoEnUnoOpciones.map((String opcion) {
                   return DropdownMenuItem<String>(
@@ -301,7 +388,8 @@ class _AgregarPCsState extends State<AgregarPCs> {
 
               TextFormField(
                 controller: caracteristicasController,
-                decoration: const InputDecoration(labelText: 'Caracteristicas PC'),
+                decoration:
+                    const InputDecoration(labelText: 'Caracteristicas PC'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor ingrese las Caracteristicas de la PCs';
@@ -337,7 +425,8 @@ class _AgregarPCsState extends State<AgregarPCs> {
 
               TextFormField(
                 controller: codigoController,
-                decoration: const InputDecoration(labelText: 'CODIGO ACT FIJOS'),
+                decoration:
+                    const InputDecoration(labelText: 'CODIGO ACT FIJOS'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor ingrese CODIGO ACT FIJOS';
@@ -349,7 +438,8 @@ class _AgregarPCsState extends State<AgregarPCs> {
 
               // Estado de la PC Dropdown
               DropdownButtonFormField<String>(
-                decoration: const InputDecoration(labelText: 'Estado de la Computadora'),
+                decoration: const InputDecoration(
+                    labelText: 'Estado de la Computadora'),
                 value: estadoPCSeleccionado,
                 items: estadoPCOpciones.map((String estado) {
                   return DropdownMenuItem<String>(
@@ -386,7 +476,8 @@ class _AgregarPCsState extends State<AgregarPCs> {
 
               TextFormField(
                 controller: programasLicenciasController,
-                decoration: const InputDecoration(labelText: 'Programas y Licencias'),
+                decoration:
+                    const InputDecoration(labelText: 'Programas y Licencias'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor ingrese los programas o licencias que contenga';
@@ -434,8 +525,10 @@ class _AgregarPCsState extends State<AgregarPCs> {
                     onPressed: () {
                       Navigator.pop(context, true);
                     },
-                    child: const Text('Cancelar', style: TextStyle(color: Colors.white)),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                    child: const Text('Cancelar',
+                        style: TextStyle(color: Colors.white)),
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
                   ),
                 ],
               ),
