@@ -42,11 +42,15 @@ class _AgregarPCsState extends State<AgregarPCs> {
   List<String> unidades = ['Fiscalización', 'Obras Públicas', 'Contabilidad', 'Inventario y Activos Fijos', 'Unidad de Presupuesto',
     'Gestión Financiera', 'Unidad de Comunicación', 'Comunicación-La Radio', 'Talleres', 'Contabilidad-Patronato', 'Salud Ocupacional',
     'Unidad Administrativas', 'Planificación', 'Bodegas', 'Riego y Drenaje', 'Tesorería', 'Secretaría General', 'Viceprefectura', 'Archivo',
-    'Jurídico', 'Prefectura', 'Fomento Productivo', 'Casa de Exposiciones', 'Compras Públicas', 'Talento Humano', 'Gestión de Riesgos', 'La Maná',
+    'Jurídico', 'Prefectura', 'Fomento Productivo', 'Casa de Exposiciones', 'Compras Públicas', 'Talento Humano', 'Gestión de Riesgos', 'La Maná', 'Otros',
   ];
 
+  // Controladores para valores personalizados
+  TextEditingController unidadCustomController = TextEditingController();
+  TextEditingController redNombreCustomController = TextEditingController();
+
   List<String> redConectadas = ['LAN(ETHERNET)', 'WAN(Wifi)'];
-  List<String> nombreReds = ['GADCOTOPAXI', 'INVITADOS GADCOTOPAXI', 'Red', 'Sin Red'];
+  List<String> nombreReds = ['GADCOTOPAXI', 'INVITADOS GADCOTOPAXI', 'Red', 'Sin Red', 'Otros'];
   List<String> maquinaTodoEnUnoOpciones = ['Si', 'No'];
   List<String> laptopOpciones = ['Si', 'No'];
   List<String> estadoPCOpciones = ['Buena', 'Regular', 'Mala'];
@@ -59,12 +63,16 @@ class _AgregarPCsState extends State<AgregarPCs> {
     if (_formKey.currentState!.validate()) {
               // Aquí agregamos el prefijo "PC-" al número ingresado
       String idPCFormatted = 'PC-${idPCCOntroller.text}';
+      String unidadFinal = unidadSeleccionada == 'Otros' ? unidadCustomController.text : unidadSeleccionada!;
+      String redNombreFinal = nombreRedSeleccionada == 'Otros' ? redNombreCustomController.text : nombreRedSeleccionada!;
+
+
       InventarioPCs nuevaPC = InventarioPCs(
         idPc: idPCFormatted,                              marcaTemporal: marcacontroller.text,
-        unidad: unidadSeleccionada!,                      ip: ipController.text,
+        unidad: unidadFinal ,                      ip: ipController.text,
         nombreDeLaPc: nombrePCcontroller.text,            nombreDelFuncionario: nombreFuncionariocontroller.text,
         puestoQueOcupa: puestoFuncionariocontroller.text, redConectada: redConectadaSeleccionada!,
-        nombreDeRed: nombreRedSeleccionada!,              dns1: dns1controller.text,
+        nombreDeRed: redNombreFinal,              dns1: dns1controller.text,
         dns2: dns2controller.text,                        sistemaOperativo: sistemaOperativocontroller.text,
         maquinaTodoEnUno: maquinaTodoEnUnoSeleccionada!,  caracteristicas: caracteristicasController.text,
         laptop: laptopSeleccionada!,                           codigoActFijos: codigoController.text,
@@ -120,6 +128,7 @@ class _AgregarPCsState extends State<AgregarPCs> {
               const SizedBox(height: 10),
 
               // Unidad Dropdown
+              // Unidad Dropdown con opción "Otros"
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Unidad'),
                 value: unidadSeleccionada,
@@ -138,9 +147,26 @@ class _AgregarPCsState extends State<AgregarPCs> {
                   if (value == null || value.isEmpty) {
                     return 'Por favor seleccione una Unidad';
                   }
+                  if (value == 'Otros' && unidadCustomController.text.isEmpty) {
+                    return 'Por favor ingrese el valor de "Otros"';
+                  }
                   return null;
                 },
               ),
+
+              // Mostrar TextFormField si "Otros" está seleccionado
+              if (unidadSeleccionada == 'Otros')
+                TextFormField(
+                  controller: unidadCustomController,
+                  decoration: const InputDecoration(labelText: 'Especifique Unidad'),
+                  validator: (value) {
+                    if (unidadSeleccionada == 'Otros' && (value == null || value.isEmpty)) {
+                      return 'Por favor ingrese una Unidad';
+                    }
+                    return null;
+                  },
+                ),
+
               const SizedBox(height: 10),
 
               TextFormField(
@@ -157,7 +183,7 @@ class _AgregarPCsState extends State<AgregarPCs> {
 
               TextFormField(
                 controller: nombreFuncionariocontroller,
-                decoration: const InputDecoration(labelText: 'Nombre del Fncionario'),
+                decoration: const InputDecoration(labelText: 'Nombre del Funcionario'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor ingrese el Nombre del Funcionario';
@@ -216,6 +242,7 @@ class _AgregarPCsState extends State<AgregarPCs> {
               const SizedBox(height: 10),
 
               // Nombre de Red Dropdown
+              // Nombre de Red Dropdown con opción "Otros"
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Nombre de Red'),
                 value: nombreRedSeleccionada,
@@ -234,9 +261,26 @@ class _AgregarPCsState extends State<AgregarPCs> {
                   if (value == null || value.isEmpty) {
                     return 'Por favor seleccione un Nombre de Red';
                   }
+                  if (value == 'Otros' && redNombreCustomController.text.isEmpty) {
+                    return 'Por favor ingrese el valor de "Otros"';
+                  }
                   return null;
                 },
               ),
+
+              // Mostrar TextFormField si "Otros" está seleccionado
+              if (nombreRedSeleccionada == 'Otros')
+                TextFormField(
+                  controller: redNombreCustomController,
+                  decoration: const InputDecoration(labelText: 'Especifique Nombre de Red'),
+                  validator: (value) {
+                    if (nombreRedSeleccionada == 'Otros' && (value == null || value.isEmpty)) {
+                      return 'Por favor ingrese un Nombre de Red';
+                    }
+                    return null;
+                  },
+                ),
+
               const SizedBox(height: 10),
 
               TextFormField(
