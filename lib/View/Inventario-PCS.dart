@@ -30,6 +30,8 @@ class _AgregarPCsState extends State<AgregarPCs> {
   TextEditingController programasLicenciasController = TextEditingController();
   TextEditingController ipRestringidasController = TextEditingController();
   TextEditingController observacionesController = TextEditingController();
+  TextEditingController unidadOtraController = TextEditingController();
+  TextEditingController nombreRedOtraController = TextEditingController();
 
   // Variables para Dropdowns
   String? unidadSeleccionada;
@@ -123,12 +125,18 @@ class _AgregarPCsState extends State<AgregarPCs> {
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Unidad'),
                 value: unidadSeleccionada,
-                items: unidades.map((String unidad) {
-                  return DropdownMenuItem<String>(
-                    value: unidad,
-                    child: Text(unidad),
-                  );
-                }).toList(),
+                items: [
+                  ...unidades.map((String unidad) {
+                    return DropdownMenuItem<String>(
+                      value: unidad,
+                      child: Text(unidad),
+                    );
+                  }).toList(),
+                  const DropdownMenuItem<String>(
+                    value: 'Otra',
+                    child: Text('Otra'),
+                  ),
+                ],
                 onChanged: (newValue) {
                   setState(() {
                     unidadSeleccionada = newValue;
@@ -157,7 +165,6 @@ class _AgregarPCsState extends State<AgregarPCs> {
                     return null;
                   },
                 ),
-
               const SizedBox(height: 10),
 
               TextFormField(
@@ -184,10 +191,10 @@ class _AgregarPCsState extends State<AgregarPCs> {
               ),
               const SizedBox(height: 10),
 
-
               TextFormField(
                 controller: puestoFuncionariocontroller,
-                decoration: const InputDecoration(labelText: 'Puesto que Ocupa'),
+                decoration:
+                    const InputDecoration(labelText: 'Puesto que Ocupa'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor ingrese el Puesto que Ocupa';
@@ -195,7 +202,7 @@ class _AgregarPCsState extends State<AgregarPCs> {
                   return null;
                 },
               ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: ipController,
                 decoration: const InputDecoration(labelText: 'IP'),
@@ -237,12 +244,18 @@ class _AgregarPCsState extends State<AgregarPCs> {
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Nombre de Red'),
                 value: nombreRedSeleccionada,
-                items: nombreReds.map((String red) {
-                  return DropdownMenuItem<String>(
-                    value: red,
-                    child: Text(red),
-                  );
-                }).toList(),
+                items: [
+                  ...nombreReds.map((String red) {
+                    return DropdownMenuItem<String>(
+                      value: red,
+                      child: Text(red),
+                    );
+                  }).toList(),
+                  const DropdownMenuItem<String>(
+                    value: 'Otra',
+                    child: Text('Otra'),
+                  ),
+                ],
                 onChanged: (newValue) {
                   setState(() {
                     nombreRedSeleccionada = newValue;
@@ -271,7 +284,6 @@ class _AgregarPCsState extends State<AgregarPCs> {
                     return null;
                   },
                 ),
-
               const SizedBox(height: 10),
 
               TextFormField(
@@ -300,7 +312,8 @@ class _AgregarPCsState extends State<AgregarPCs> {
 
               TextFormField(
                 controller: sistemaOperativocontroller,
-                decoration: const InputDecoration(labelText: 'Sistema Operativo'),
+                decoration:
+                    const InputDecoration(labelText: 'Sistema Operativo'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor ingrese el Sistema Operativo';
@@ -312,7 +325,8 @@ class _AgregarPCsState extends State<AgregarPCs> {
 
               // Maquina Todo en Uno Dropdown
               DropdownButtonFormField<String>(
-                decoration: const InputDecoration(labelText: 'Maquina Todo en Uno'),
+                decoration:
+                    const InputDecoration(labelText: 'Maquina Todo en Uno'),
                 value: maquinaTodoEnUnoSeleccionada,
                 items: maquinaTodoEnUnoOpciones.map((String opcion) {
                   return DropdownMenuItem<String>(
@@ -338,7 +352,8 @@ class _AgregarPCsState extends State<AgregarPCs> {
 
               TextFormField(
                 controller: caracteristicasController,
-                decoration: const InputDecoration(labelText: 'Caracteristicas PC'),
+                decoration:
+                    const InputDecoration(labelText: 'Caracteristicas PC'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor ingrese las Caracteristicas de la PCs';
@@ -376,7 +391,8 @@ class _AgregarPCsState extends State<AgregarPCs> {
 
               TextFormField(
                 controller: codigoController,
-                decoration: const InputDecoration(labelText: 'CODIGO ACT FIJOS'),
+                decoration:
+                    const InputDecoration(labelText: 'CODIGO ACT FIJOS'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor ingrese CODIGO ACT FIJOS';
@@ -388,7 +404,8 @@ class _AgregarPCsState extends State<AgregarPCs> {
 
               // Estado de la PC Dropdown
               DropdownButtonFormField<String>(
-                decoration: const InputDecoration(labelText: 'Estado de la Computadora'),
+                decoration: const InputDecoration(
+                    labelText: 'Estado de la Computadora'),
                 value: estadoPCSeleccionado,
                 items: estadoPCOpciones.map((String estado) {
                   return DropdownMenuItem<String>(
@@ -471,8 +488,10 @@ class _AgregarPCsState extends State<AgregarPCs> {
                     onPressed: () {
                       Navigator.pop(context, true);
                     },
-                    child: const Text('Cancelar', style: TextStyle(color: Colors.white)),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                    child: const Text('Cancelar',
+                        style: TextStyle(color: Colors.white)),
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
                   ),
                 ],
               ),
