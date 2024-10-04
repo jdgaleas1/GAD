@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gad/Model/Inventario-PC-model.dart'; // Asegúrate de importar tu modelo
-import 'package:gad/Service/Inventario-PC-Servicio.dart'; // Asegúrate de importar el servicio
+import 'package:gad/Service/Inventario-PC-Servicio.dart'; 
+import 'package:gad/View/caracteristicas.dart';// Asegúrate de importar el servicio
 
 class AgregarPCs extends StatefulWidget {
   const AgregarPCs({super.key});
@@ -42,11 +43,16 @@ class _AgregarPCsState extends State<AgregarPCs> {
   List<String> unidades = ['Fiscalización', 'Obras Públicas', 'Contabilidad', 'Inventario y Activos Fijos', 'Unidad de Presupuesto',
     'Gestión Financiera', 'Unidad de Comunicación', 'Comunicación-La Radio', 'Talleres', 'Contabilidad-Patronato', 'Salud Ocupacional',
     'Unidad Administrativas', 'Planificación', 'Bodegas', 'Riego y Drenaje', 'Tesorería', 'Secretaría General', 'Viceprefectura', 'Archivo',
-    'Jurídico', 'Prefectura', 'Fomento Productivo', 'Casa de Exposiciones', 'Compras Públicas', 'Talento Humano', 'Gestión de Riesgos', 'La Maná',
+    'Jurídico', 'Prefectura', 'Fomento Productivo', 'Casa de Exposiciones', 'Compras Públicas', 'Talento Humano', 'Gestión de Riesgos', 'La Maná', 'Otros',
   ];
+    List<String> _selectProgramas = [];
+
+  // Controladores para valores personalizados
+  TextEditingController unidadCustomController = TextEditingController();
+  TextEditingController redNombreCustomController = TextEditingController();
 
   List<String> redConectadas = ['LAN(ETHERNET)', 'WAN(Wifi)'];
-  List<String> nombreReds = ['GADCOTOPAXI', 'INVITADOS GADCOTOPAXI', 'Red', 'Sin Red'];
+  List<String> nombreReds = ['GADCOTOPAXI', 'INVITADOS GADCOTOPAXI', 'Red', 'Sin Red', 'Otros'];
   List<String> maquinaTodoEnUnoOpciones = ['Si', 'No'];
   List<String> laptopOpciones = ['Si', 'No'];
   List<String> estadoPCOpciones = ['Buena', 'Regular', 'Mala'];
@@ -57,19 +63,23 @@ class _AgregarPCsState extends State<AgregarPCs> {
   // Método para guardar los datos en la base de datos
   _guardarPC() async {
     if (_formKey.currentState!.validate()) {
-              // Aquí agregamos el prefijo "PC-" al número ingresado
-      String idPCFormatted = 'PC-${idPCCOntroller.text}';
+
+      String unidadFinal = unidadSeleccionada == 'Otros' ? unidadCustomController.text : unidadSeleccionada!;
+      String redNombreFinal = nombreRedSeleccionada == 'Otros' ? redNombreCustomController.text : nombreRedSeleccionada!;
+      String selectProgramas = _selectProgramas.join(', ');
+
+
       InventarioPCs nuevaPC = InventarioPCs(
-        idPc: idPCFormatted,                              marcaTemporal: marcacontroller.text,
-        unidad: unidadSeleccionada!,                      ip: ipController.text,
+        marcaTemporal: marcacontroller.text,
+        unidad: unidadFinal ,                      ip: ipController.text,
         nombreDeLaPc: nombrePCcontroller.text,            nombreDelFuncionario: nombreFuncionariocontroller.text,
         puestoQueOcupa: puestoFuncionariocontroller.text, redConectada: redConectadaSeleccionada!,
-        nombreDeRed: nombreRedSeleccionada!,              dns1: dns1controller.text,
+        nombreDeRed: redNombreFinal,              dns1: dns1controller.text,
         dns2: dns2controller.text,                        sistemaOperativo: sistemaOperativocontroller.text,
         maquinaTodoEnUno: maquinaTodoEnUnoSeleccionada!,  caracteristicas: caracteristicasController.text,
         laptop: laptopSeleccionada!,                           codigoActFijos: codigoController.text,
         estadoDeComputadora: estadoPCSeleccionado!,            dominio: dominioController.text,
-        programasLicencias: programasLicenciasController.text, ipRestringidas: ipRestringidasController.text,
+        programasLicencias: selectProgramas, ipRestringidas: ipRestringidasController.text,
         observaciones: observacionesController.text,
       );
       // Guardar los datos en Firestore usando el servicio
@@ -95,17 +105,6 @@ class _AgregarPCsState extends State<AgregarPCs> {
           key: _formKey,
           child: ListView(
             children: [
-                    TextFormField(
-                      controller: idPCCOntroller,
-                      decoration: const InputDecoration(labelText: 'ID PC'),
-                      keyboardType: TextInputType.number, // Tipo de teclado solo numérico
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor ingrese un id/numero que identifique esa PC';
-                        }
-                        return null;
-                      },
-                    ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: marcacontroller,
@@ -120,6 +119,7 @@ class _AgregarPCsState extends State<AgregarPCs> {
               const SizedBox(height: 10),
 
               // Unidad Dropdown
+              // Unidad Dropdown con opción "Otros"
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Unidad'),
                 value: unidadSeleccionada,
@@ -138,9 +138,26 @@ class _AgregarPCsState extends State<AgregarPCs> {
                   if (value == null || value.isEmpty) {
                     return 'Por favor seleccione una Unidad';
                   }
+                  if (value == 'Otros' && unidadCustomController.text.isEmpty) {
+                    return 'Por favor ingrese el valor de "Otros"';
+                  }
                   return null;
                 },
               ),
+
+              // Mostrar TextFormField si "Otros" está seleccionado
+              if (unidadSeleccionada == 'Otros')
+                TextFormField(
+                  controller: unidadCustomController,
+                  decoration: const InputDecoration(labelText: 'Especifique Unidad'),
+                  validator: (value) {
+                    if (unidadSeleccionada == 'Otros' && (value == null || value.isEmpty)) {
+                      return 'Por favor ingrese una Unidad';
+                    }
+                    return null;
+                  },
+                ),
+
               const SizedBox(height: 10),
 
               TextFormField(
@@ -157,7 +174,7 @@ class _AgregarPCsState extends State<AgregarPCs> {
 
               TextFormField(
                 controller: nombreFuncionariocontroller,
-                decoration: const InputDecoration(labelText: 'Nombre del Fncionario'),
+                decoration: const InputDecoration(labelText: 'Nombre del Funcionario'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor ingrese el Nombre del Funcionario';
@@ -216,6 +233,7 @@ class _AgregarPCsState extends State<AgregarPCs> {
               const SizedBox(height: 10),
 
               // Nombre de Red Dropdown
+              // Nombre de Red Dropdown con opción "Otros"
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Nombre de Red'),
                 value: nombreRedSeleccionada,
@@ -234,9 +252,26 @@ class _AgregarPCsState extends State<AgregarPCs> {
                   if (value == null || value.isEmpty) {
                     return 'Por favor seleccione un Nombre de Red';
                   }
+                  if (value == 'Otros' && redNombreCustomController.text.isEmpty) {
+                    return 'Por favor ingrese el valor de "Otros"';
+                  }
                   return null;
                 },
               ),
+
+              // Mostrar TextFormField si "Otros" está seleccionado
+              if (nombreRedSeleccionada == 'Otros')
+                TextFormField(
+                  controller: redNombreCustomController,
+                  decoration: const InputDecoration(labelText: 'Especifique Nombre de Red'),
+                  validator: (value) {
+                    if (nombreRedSeleccionada == 'Otros' && (value == null || value.isEmpty)) {
+                      return 'Por favor ingrese un Nombre de Red';
+                    }
+                    return null;
+                  },
+                ),
+
               const SizedBox(height: 10),
 
               TextFormField(
@@ -297,6 +332,8 @@ class _AgregarPCsState extends State<AgregarPCs> {
                   return null;
                 },
               ),
+
+
               const SizedBox(height: 10),
 
               TextFormField(
@@ -309,6 +346,8 @@ class _AgregarPCsState extends State<AgregarPCs> {
                   return null;
                 },
               ),
+
+              
               const SizedBox(height: 10),
 
               // Laptop Dropdown
@@ -383,16 +422,14 @@ class _AgregarPCsState extends State<AgregarPCs> {
               ),
 
               const SizedBox(height: 10),
-
-              TextFormField(
-                controller: programasLicenciasController,
-                decoration: const InputDecoration(labelText: 'Programas y Licencias'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor ingrese los programas o licencias que contenga';
-                  }
-                  return null;
+              programasSeleccionar(
+                selectProgramas: _selectProgramas,
+                onChanged: (features) {
+                  setState(() {
+                    _selectProgramas = features;
+                  });
                 },
+                
               ),
 
               const SizedBox(height: 10),
@@ -446,3 +483,40 @@ class _AgregarPCsState extends State<AgregarPCs> {
     );
   }
 }
+
+
+class programasSeleccionar extends StatelessWidget {
+  final List<String> selectProgramas;
+  final Function(List<String>) onChanged;
+
+  programasSeleccionar({required this.selectProgramas, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Programas Y Licencia', style: TextStyle(fontWeight: FontWeight.bold)),
+        Wrap(
+          spacing: 10.0,
+          children: programas.map((programa) {
+            bool isSelected = selectProgramas.contains(programa.nombre);
+            return ChoiceChip(
+              avatar: Icon(programa.icon),
+              label: Text(programa.nombre),
+              selected: isSelected,
+              onSelected: (selected) {
+                if (selected) {
+                  onChanged([...selectProgramas, programa.nombre]);
+                } else {
+                  onChanged(selectProgramas.where((feature) => feature != programa.nombre).toList());
+                }
+              },
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+}
+

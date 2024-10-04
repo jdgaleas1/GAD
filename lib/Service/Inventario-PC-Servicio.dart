@@ -11,7 +11,7 @@ Future<void> guardarInventario(InventarioPCs inventario) async {
     Map<String, dynamic> inventarioData = inventario.toJson();
 
     // Usar un ID personalizado
-    String customId = inventario.idPc;
+    String customId = inventario.marcaTemporal;
 
     // Usar `set()` con el ID personalizado
     await _firestore.collection(collectionName).doc(customId).set(inventarioData);
@@ -44,8 +44,8 @@ Future<List<InventarioPCs>> obtenerInventario() async {
   Future<void> actualizarInventario(InventarioPCs inventario) async {
     try {
       // Verificar que el ID no sea nulo
-      if (inventario.idPc == null) {
-        throw Exception("El ID del inventario no puede ser nulo.");
+      if (inventario.marcaTemporal == null) {
+        throw Exception("La marca temporal inventario no puede ser nulo.");
       }
 
       // Convertir el objeto InventarioPCs a JSON
@@ -54,7 +54,7 @@ Future<List<InventarioPCs>> obtenerInventario() async {
       // Actualizar el inventario en Firestore usando el ID del documento
       await _firestore
           .collection(collectionName)
-          .doc(inventario.idPc) // Utiliza el ID para identificar el documento
+          .doc(inventario.marcaTemporal) // Utiliza el ID para identificar el documento
           .update(inventarioData);
 
       print("Inventario actualizado con éxito");
@@ -64,9 +64,9 @@ Future<List<InventarioPCs>> obtenerInventario() async {
   }
 
   // Método para eliminar un inventario de Firestore
-  Future<void> eliminarPC(String idPC) async {
+  Future<void> eliminarPC(String marcaTemporal) async {
     try {
-      await _firestore.collection(collectionName).doc(idPC).delete();
+      await _firestore.collection(collectionName).doc(marcaTemporal).delete();
       print("PC eliminada exitosamente.");
     } catch (e) {
       print('Error al eliminar el inventario: $e');

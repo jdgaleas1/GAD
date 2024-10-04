@@ -39,14 +39,14 @@ class ImportarExportar {
           }
           // Procesar la fila si no está vacía
           InventarioPCs nuevaPC = InventarioPCs(
-            idPc: row[0]?.value.toString() ?? '', marcaTemporal: row[1]?.value.toString() ?? '', unidad: row[2]?.value.toString() ?? '',
-            ip: row[3]?.value.toString() ?? '', nombreDeLaPc: row[4]?.value.toString() ?? '', nombreDelFuncionario: row[5]?.value.toString() ?? '',
-            puestoQueOcupa: row[6]?.value.toString() ?? '', redConectada: row[7]?.value.toString() ?? '', nombreDeRed: row[8]?.value.toString() ?? '',
-            dns1: row[9]?.value.toString() ?? '', dns2: row[10]?.value.toString() ?? '', sistemaOperativo: row[11]?.value.toString() ?? '',
-            maquinaTodoEnUno: row[12]?.value.toString() ?? '', caracteristicas: row[13]?.value.toString() ?? '',
-            laptop: row[14]?.value.toString() ?? '', codigoActFijos: row[15]?.value.toString() ?? '', estadoDeComputadora: row[16]?.value.toString() ?? '',
-            dominio: row[17]?.value.toString() ?? '',  programasLicencias: row[18]?.value.toString() ?? '', ipRestringidas: row[19]?.value.toString() ?? '', 
-            observaciones: row[20]?.value.toString() ?? '',
+            marcaTemporal: row[0]?.value.toString() ?? '', unidad: row[1]?.value.toString() ?? '',
+            ip: row[2]?.value.toString() ?? '', nombreDeLaPc: row[3]?.value.toString() ?? '', nombreDelFuncionario: row[4]?.value.toString() ?? '',
+            puestoQueOcupa: row[5]?.value.toString() ?? '', redConectada: row[6]?.value.toString() ?? '', nombreDeRed: row[7]?.value.toString() ?? '',
+            dns1: row[8]?.value.toString() ?? '', dns2: row[9]?.value.toString() ?? '', sistemaOperativo: row[10]?.value.toString() ?? '',
+            maquinaTodoEnUno: row[11]?.value.toString() ?? '', caracteristicas: row[12]?.value.toString() ?? '',
+            laptop: row[13]?.value.toString() ?? '', codigoActFijos: row[14]?.value.toString() ?? '', estadoDeComputadora: row[15]?.value.toString() ?? '',
+            dominio: row[16]?.value.toString() ?? '',  programasLicencias: row[17]?.value.toString() ?? '', ipRestringidas: row[18]?.value.toString() ?? '', 
+            observaciones: row[19]?.value.toString() ?? '',
           );
 
           // Guardar cada fila en Firestore
@@ -67,7 +67,7 @@ class ImportarExportar {
 
     // Añadir la primera fila con los títulos de las columnas
     sheetObject.appendRow([
-      "#",                      'Marca temporal',
+      'Marca temporal',
       'Unidad',                 'IP',
       'NOMBRE DE LA PC',        'NOMBRE DEL FUNCIONARIO',
       'PUESTO QUE OCUPA',       'RED CONECTADA',
@@ -82,7 +82,7 @@ class ImportarExportar {
     // Llenar las filas con los datos del inventario
     for (var inventario in inventarioData) {
       sheetObject.appendRow([
-        inventario.idPc ?? '',                inventario.marcaTemporal ?? '',
+        inventario.marcaTemporal ?? '',
         inventario.unidad ?? '',              inventario.ip ?? '',
         inventario.nombreDeLaPc ?? '',        inventario.nombreDelFuncionario ?? '',
         inventario.puestoQueOcupa ?? '',      inventario.redConectada ?? '',
