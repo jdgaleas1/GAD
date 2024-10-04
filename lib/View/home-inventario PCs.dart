@@ -134,7 +134,6 @@ class _PCsHomeState extends State<PCsHome> {
                 child: DataTable(
                   dataRowHeight: 160,
                   columns: const [
-                    DataColumn(label: Text('ID')),
                     DataColumn(label: Text('Marca Temporal')),
                     DataColumn(label: Text('Unidad')),
                     DataColumn(label: Text('Nombre de la PC')),
@@ -160,18 +159,10 @@ class _PCsHomeState extends State<PCsHome> {
 
                   ],
                   rows: inventarios.map((pc) {
-                    bool isEditing = _editingRows.contains(pc.idPc);
+                    bool isEditing = _editingRows.contains(pc.marcaTemporal);
 
                     return DataRow(
                       cells: [
-                        DataCell(isEditing
-                            ? TextFormField(
-                                initialValue: pc.idPc ?? 'N/A',
-                                onChanged: (value) {
-                                  pc.idPc = value;
-                                },
-                              )
-                            : Text(pc.idPc ?? 'N/A')),
                         DataCell(isEditing
                             ? TextFormField(
                                 initialValue: pc.marcaTemporal,
@@ -342,9 +333,9 @@ class _PCsHomeState extends State<PCsHome> {
                                 if (isEditing) {
                                   // Actualiza el inventario en Firestore
                                   _inventarioService.actualizarInventario(pc);
-                                  _editingRows.remove(pc.idPc);
+                                  _editingRows.remove(pc.marcaTemporal);
                                 } else {
-                                  _editingRows.add(pc.idPc!);
+                                  _editingRows.add(pc.marcaTemporal!);
                                 }
                               });
                             },
@@ -369,7 +360,7 @@ class _PCsHomeState extends State<PCsHome> {
                                           ),
                                           TextButton(
                                             onPressed: () {
-                                              _inventarioService.eliminarPC(pc.idPc!);
+                                              _inventarioService.eliminarPC(pc.marcaTemporal!);
                                               _refreshPCs(); // Refrescar la lista después de eliminar
                                               Navigator.of(context).pop(); // Cerrar el diálogo
                                             },

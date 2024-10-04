@@ -7,7 +7,7 @@ import 'dart:convert';
 String inventarioPCsToJson(InventarioPCs data) => json.encode(data.toJson());
 
 class InventarioPCs {
-  String idPc;
+
   String marcaTemporal;
   String unidad;
   String ip;
@@ -30,7 +30,6 @@ class InventarioPCs {
   String observaciones;
 
   InventarioPCs({         
-    required this.idPc,
     required this.marcaTemporal,
     required this.unidad,
     required this.ip,
@@ -54,7 +53,6 @@ class InventarioPCs {
   });
 
   factory InventarioPCs.fromJson(Map<String, dynamic> json) => InventarioPCs(
-        idPc: json["idPC"] ??'', // Si el campo es null, se asigna una cadena vacía
         marcaTemporal: json["Marca temporal"] ?? '',
         unidad: json["Unidad"] ?? '',
         ip: json["IP"] ?? '',
@@ -78,7 +76,6 @@ class InventarioPCs {
       );
 
   Map<String, dynamic> toJson() => {
-        "idPC": idPc,
         "Marca temporal": marcaTemporal,
         "Unidad": unidad,
         "IP": ip,
