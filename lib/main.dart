@@ -27,7 +27,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-   MyApp({super.key});
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-   MyHomePage({super.key, required this.title});
+  MyHomePage({super.key, required this.title});
   final String title;
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -54,15 +54,13 @@ class _MyHomePageState extends State<MyHomePage> {
   late List<Widget> _content;
   int _selectedIndex = 0;
 
-   final ImportarExportar _importarExportar = ImportarExportar();
-
+  final ImportarExportar _importarExportar = ImportarExportar();
   @override
   void initState() {
     super.initState();
     // Inicialización de los contenidos de las pestañas
     _content = [
-      PCsHome (),
-
+      PCsHome(),
     ];
   }
 
@@ -74,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-    // Define la función seleccionarArchivoExcel
+  // Define la función seleccionarArchivoExcel
   void seleccionarArchivoExcel() async {
     await _importarExportar.seleccionarArchivoExcel();
     ScaffoldMessenger.of(context).showSnackBar(
@@ -95,14 +93,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title), 
+        title: Text(widget.title),
       ),
       body: Center(
         child: _content[_selectedIndex],
       ),
       drawer: CustomDrawer(
         onItemTapped: _onItemTapped,
-        seleccionarArchivoExcel: seleccionarArchivoExcel, // Pasa la función de importar
+        seleccionarArchivoExcel:
+            seleccionarArchivoExcel, // Pasa la función de importar
         exportarDatos: exportarDatos, // Pasa la función de exportar
       ),
     );

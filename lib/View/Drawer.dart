@@ -1,25 +1,24 @@
-
 import 'package:flutter/material.dart';
-import 'package:gad/Model/Temas-Estados.dart';
 import 'package:gad/View/Inventario-PCS.dart';
+import 'package:gad/View/Dispositivos-PCS.dart';
+import 'package:gad/View/home-dispositivos.dart';
 import 'package:provider/provider.dart';
+import 'package:gad/Model/Temas-Estados.dart';
 
 class CustomDrawer extends StatelessWidget {
   final Function(int) onItemTapped;
-  final VoidCallback seleccionarArchivoExcel; // Añadir la función de importar
-  final VoidCallback exportarDatos; // Añadir la función de exportar
+  final VoidCallback seleccionarArchivoExcel;
+  final VoidCallback exportarDatos;
 
   CustomDrawer({
     super.key,
     required this.onItemTapped,
-        required this.seleccionarArchivoExcel, // Recibe la función de importar
-    required this.exportarDatos, // Recibe la función de exportar
+    required this.seleccionarArchivoExcel,
+    required this.exportarDatos,
   });
 
   @override
   Widget build(BuildContext context) {
-
-    
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -42,7 +41,7 @@ class CustomDrawer extends StatelessWidget {
                 backgroundImage: AssetImage('assets/images/avatar.png'),
                 radius: 40,
               ),
-                const SizedBox(height: 10),          
+              const SizedBox(height: 10),
               Text(
                 'GAD EC',
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
@@ -55,38 +54,35 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.fact_check),
             title: Text('Inventario Nuevo'),
-              onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AgregarPCs()),
-                    );
-
-              },
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AgregarPCs()),
+              );
+            },
           ),
-          // El nuevo ExpansionTile para Importar/Exportar
-          ExpansionTile(
-            leading: Icon(Icons.import_export),
-            title: Text('Importar/Exportar'),
-            children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.upload_file),
-                title: Text('Importar'),
-                onTap: () {
-                  seleccionarArchivoExcel(); // Llama a la función de importar
-                  Navigator.pop(context); // Cierra el drawer
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.download),
-                title: Text('Exportar'),
-                onTap: () {
-                exportarDatos(); // 
-                  Navigator.pop(context); // Cierra el drawer
-                },
-              ),
-            ],
+          ListTile(
+            leading: Icon(Icons.view_list),
+            title: Text('Ver Dispositivos'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => InventarioTabla()),
+              );
+            },
           ),
-                  
+          // Nuevo ListTile para agregar dispositivos
+          ListTile(
+            leading: Icon(Icons.add_circle),
+            title: Text('Agregar Dispositivos'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AgregarDispositivoScreen()),
+              );
+            },
+          ),
           ExpansionTile(
             leading: Icon(Icons.settings),
             title: Text('Configuración'),
