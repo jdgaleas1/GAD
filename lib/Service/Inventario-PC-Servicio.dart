@@ -6,24 +6,26 @@ class InventarioService {
   final String collectionName = "Inventario-PCs";
 
   // Método para guardar un inventario en Firestore
-Future<void> guardarInventario(InventarioPCs inventario) async {
-  try {
-    Map<String, dynamic> inventarioData = inventario.toJson();
+  Future<void> guardarInventario(InventarioPCs inventario) async {
+    try {
+      Map<String, dynamic> inventarioData = inventario.toJson();
 
-    // Usar un ID personalizado
-    String customId = inventario.marcaTemporal;
+      // Usar un ID personalizado
+      String customId = inventario.marcaTemporal;
 
-    // Usar `set()` con el ID personalizado
-    await _firestore.collection(collectionName).doc(customId).set(inventarioData);
+      // Usar `set()` con el ID personalizado
+      await _firestore
+          .collection(collectionName)
+          .doc(customId)
+          .set(inventarioData);
 
-    print("Inventario guardado con éxito con ID personalizado: $customId");
-  } catch (e) {
-    print("Error al guardar el inventario: $e");
+      print("Inventario guardado con éxito con ID personalizado: $customId");
+    } catch (e) {
+      print("Error al guardar el inventario: $e");
+    }
   }
-}
 
-
-Future<List<InventarioPCs>> obtenerInventario() async {
+  Future<List<InventarioPCs>> obtenerInventario() async {
     try {
       // Consulta todos los documentos en la colección "Inventario-PCs"
       QuerySnapshot querySnapshot =
@@ -40,6 +42,7 @@ Future<List<InventarioPCs>> obtenerInventario() async {
       return [];
     }
   }
+
 // Método para actualizar un inventario existente en Firestore
   Future<void> actualizarInventario(InventarioPCs inventario) async {
     try {
@@ -54,7 +57,8 @@ Future<List<InventarioPCs>> obtenerInventario() async {
       // Actualizar el inventario en Firestore usando el ID del documento
       await _firestore
           .collection(collectionName)
-          .doc(inventario.marcaTemporal) // Utiliza el ID para identificar el documento
+          .doc(inventario
+              .marcaTemporal) // Utiliza el ID para identificar el documento
           .update(inventarioData);
 
       print("Inventario actualizado con éxito");

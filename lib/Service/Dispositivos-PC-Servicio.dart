@@ -6,7 +6,7 @@ class InventarioServiceDispositivos {
   final String collectionName = "dispositivos";
 
   // Método para guardar un inventario en Firestore
-  Future<void> guardarInventario(InventarioPCs inventario) async {
+  Future<void> guardarInventario(InventarioDispositivos inventario) async {
     try {
       Map<String, dynamic> inventarioData = inventario.toJson();
 
@@ -26,15 +26,16 @@ class InventarioServiceDispositivos {
   }
 
   // Método para obtener todos los inventarios desde Firestore
-  Future<List<InventarioPCs>> obtenerInventario() async {
+  Future<List<InventarioDispositivos>> obtenerInventario() async {
     try {
       // Consulta todos los documentos en la colección "Inventario-PCs"
       QuerySnapshot querySnapshot =
           await _firestore.collection(collectionName).get();
 
       // Extraer los datos y convertirlos en una lista de objetos InventarioPCs
-      List<InventarioPCs> inventarios = querySnapshot.docs.map((doc) {
-        return InventarioPCs.fromJson(doc.data() as Map<String, dynamic>);
+      List<InventarioDispositivos> inventarios = querySnapshot.docs.map((doc) {
+        return InventarioDispositivos.fromJson(
+            doc.data() as Map<String, dynamic>);
       }).toList();
 
       return inventarios;
@@ -45,7 +46,7 @@ class InventarioServiceDispositivos {
   }
 
   // Método para actualizar un inventario existente en Firestore
-  Future<void> actualizarInventario(InventarioPCs inventario) async {
+  Future<void> actualizarDispositivo(InventarioDispositivos inventario) async {
     try {
       // Verificar que el ID no sea nulo
       if (inventario.marcaTemporal.isEmpty) {
@@ -69,7 +70,7 @@ class InventarioServiceDispositivos {
   }
 
   // Método para eliminar un inventario de Firestore
-  Future<void> eliminarPC(String marcaTemporal) async {
+  Future<void> eliminarDispositivo(String marcaTemporal) async {
     try {
       await _firestore.collection(collectionName).doc(marcaTemporal).delete();
       print("PC eliminada exitosamente.");

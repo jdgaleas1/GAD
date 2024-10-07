@@ -4,9 +4,10 @@
 
 import 'dart:convert';
 
-String inventarioPCsToJson(InventarioPCs data) => json.encode(data.toJson());
+String inventarioPCsToJson(InventarioDispositivos data) =>
+    json.encode(data.toJson());
 
-class InventarioPCs {
+class InventarioDispositivos {
   String modelo;
   String area;
   String servicio;
@@ -15,7 +16,7 @@ class InventarioPCs {
   String marcaTemporal;
   String ip;
 
-  InventarioPCs({
+  InventarioDispositivos({
     required this.modelo,
     required this.area,
     required this.servicio,
@@ -25,7 +26,8 @@ class InventarioPCs {
     required this.ip,
   });
 
-  factory InventarioPCs.fromJson(Map<String, dynamic> json) => InventarioPCs(
+  factory InventarioDispositivos.fromJson(Map<String, dynamic> json) =>
+      InventarioDispositivos(
         modelo: json["Modelo"] ?? '',
         area: json["Área"] ?? '',
         servicio: json["Servicio"] ?? '',

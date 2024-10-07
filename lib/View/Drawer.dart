@@ -83,6 +83,31 @@ class CustomDrawer extends StatelessWidget {
               );
             },
           ),
+          // ExpansionTile para Importar/Exportar
+          ExpansionTile(
+            leading: Icon(Icons.import_export),
+            title: Text('Importar/Exportar'),
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.upload_file),
+                title: Text('Importar'),
+                onTap: () {
+                  seleccionarArchivoExcel();
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.download),
+                title: Text('Exportar'),
+                onTap: () {
+                  exportarDatos();
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+
+          // Configuración
           ExpansionTile(
             leading: Icon(Icons.settings),
             title: Text('Configuración'),
