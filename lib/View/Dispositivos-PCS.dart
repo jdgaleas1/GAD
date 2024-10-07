@@ -100,8 +100,7 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     // Crear una instancia de tu modelo
-                    InventarioDispositivos nuevoDispositivo =
-                        InventarioDispositivos(
+                    Dispositivos nuevoDispositivo = Dispositivos(
                       modelo: modeloController.text,
                       area: areaController.text,
                       servicio: servicioController.text,

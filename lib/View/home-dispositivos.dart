@@ -13,7 +13,7 @@ class InventarioTabla extends StatelessWidget {
       appBar: AppBar(
         title: Text('Inventario de Dispositivos'),
       ),
-      body: FutureBuilder<List<InventarioDispositivos>>(
+      body: FutureBuilder<List<Dispositivos>>(
         future: _inventarioService.obtenerInventario(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -80,7 +80,7 @@ class InventarioTabla extends StatelessWidget {
 
   // Función para mostrar el formulario de edición
   void _mostrarFormularioEditar(
-      BuildContext context, InventarioDispositivos inventario) {
+      BuildContext context, Dispositivos inventario) {
     // Abre una nueva página o muestra un formulario en un diálogo para editar los datos.
     showDialog(
       context: context,
@@ -144,7 +144,7 @@ class InventarioTabla extends StatelessWidget {
               child: Text('Guardar'),
               onPressed: () async {
                 // Actualizar el dispositivo en la base de datos
-                InventarioDispositivos actualizado = InventarioDispositivos(
+                Dispositivos actualizado = Dispositivos(
                   modelo: _modeloController.text,
                   area: _areaController.text,
                   servicio: _servicioController.text,
@@ -165,7 +165,7 @@ class InventarioTabla extends StatelessWidget {
 
   // Función para confirmar y eliminar el dispositivo
   void _confirmarEliminar(
-      BuildContext context, InventarioDispositivos inventario) {
+      BuildContext context, Dispositivos inventario) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

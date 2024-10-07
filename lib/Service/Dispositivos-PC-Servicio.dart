@@ -6,7 +6,7 @@ class InventarioServiceDispositivos {
   final String collectionName = "dispositivos";
 
   // Método para guardar un inventario en Firestore
-  Future<void> guardarInventario(InventarioDispositivos inventario) async {
+  Future<void> guardarInventario(Dispositivos inventario) async {
     try {
       Map<String, dynamic> inventarioData = inventario.toJson();
 
@@ -26,16 +26,15 @@ class InventarioServiceDispositivos {
   }
 
   // Método para obtener todos los inventarios desde Firestore
-  Future<List<InventarioDispositivos>> obtenerInventario() async {
+  Future<List<Dispositivos>> obtenerInventario() async {
     try {
       // Consulta todos los documentos en la colección "Inventario-PCs"
       QuerySnapshot querySnapshot =
           await _firestore.collection(collectionName).get();
 
-      // Extraer los datos y convertirlos en una lista de objetos InventarioPCs
-      List<InventarioDispositivos> inventarios = querySnapshot.docs.map((doc) {
-        return InventarioDispositivos.fromJson(
-            doc.data() as Map<String, dynamic>);
+      // Extraer los datos y convertirlos en una lista de objetos Dispositivos
+      List<Dispositivos> inventarios = querySnapshot.docs.map((doc) {
+        return Dispositivos.fromJson(doc.data() as Map<String, dynamic>);
       }).toList();
 
       return inventarios;
@@ -46,7 +45,7 @@ class InventarioServiceDispositivos {
   }
 
   // Método para actualizar un inventario existente en Firestore
-  Future<void> actualizarDispositivo(InventarioDispositivos inventario) async {
+  Future<void> actualizarDispositivo(Dispositivos inventario) async {
     try {
       // Verificar que el ID no sea nulo
       if (inventario.marcaTemporal.isEmpty) {
@@ -54,7 +53,7 @@ class InventarioServiceDispositivos {
             "La marca temporal del inventario no puede estar vacía.");
       }
 
-      // Convertir el objeto InventarioPCs a JSON
+      // Convertir el objeto Dispositivos a JSON
       Map<String, dynamic> inventarioData = inventario.toJson();
 
       // Actualizar el inventario en Firestore usando el ID del documento

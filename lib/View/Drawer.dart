@@ -70,7 +70,7 @@ class CustomDrawer extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => InventarioTabla()),
               );
             },
-          ),
+          ),  
           // Nuevo ListTile para agregar dispositivos
           ListTile(
             leading: Icon(Icons.add_circle),
@@ -83,7 +83,7 @@ class CustomDrawer extends StatelessWidget {
               );
             },
           ),
-          // ExpansionTile para Importar/Exportar
+          // El nuevo ExpansionTile para Importar/Exportar
           ExpansionTile(
             leading: Icon(Icons.import_export),
             title: Text('Importar/Exportar'),
@@ -92,22 +92,21 @@ class CustomDrawer extends StatelessWidget {
                 leading: Icon(Icons.upload_file),
                 title: Text('Importar'),
                 onTap: () {
-                  seleccionarArchivoExcel();
-                  Navigator.pop(context);
+                  seleccionarArchivoExcel(); // Llama a la función de importar
+                  Navigator.pop(context); // Cierra el drawer
                 },
               ),
               ListTile(
                 leading: Icon(Icons.download),
                 title: Text('Exportar'),
                 onTap: () {
-                  exportarDatos();
-                  Navigator.pop(context);
+                exportarDatos(); // 
+                  Navigator.pop(context); // Cierra el drawer
                 },
               ),
             ],
           ),
 
-          // Configuración
           ExpansionTile(
             leading: Icon(Icons.settings),
             title: Text('Configuración'),
