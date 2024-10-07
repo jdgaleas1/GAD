@@ -3,7 +3,7 @@ import 'package:gad/Model/Inventario-PC-model.dart';
 
 class InventarioService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String collectionName = "Inventario-PCs";
+  final String collectionName = "Inventario-PCss";
 
   // Método para guardar un inventario en Firestore
 Future<void> guardarInventario(InventarioPCs inventario) async {

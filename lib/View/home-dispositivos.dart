@@ -13,7 +13,7 @@ class InventarioTabla extends StatelessWidget {
       appBar: AppBar(
         title: Text('Inventario de Dispositivos'),
       ),
-      body: FutureBuilder<List<InventarioPCs>>(
+      body: FutureBuilder<List<Dispositivos>>(
         future: _inventarioService.obtenerInventario(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
