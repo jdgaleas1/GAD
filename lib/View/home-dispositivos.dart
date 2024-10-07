@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gad/Service/Dispositivos-PC-Servicio.dart';
 import 'package:gad/Model/Dispositivos-PC-model.dart';
@@ -11,28 +10,28 @@ class InventarioTabla extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Inventario de Dispositivos'),
+        title: const Text('Inventario de Dispositivos'),
       ),
       body: FutureBuilder<List<Dispositivos>>(
         future: _inventarioService.obtenerInventario(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('Error al cargar los datos'));
+            return const Center(child: Text('Error al cargar los datos'));
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No hay inventario disponible.'));
+            return const Center(child: Text('No hay inventario disponible.'));
           }
 
           // Si hay datos, los mostramos en una tabla
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: DataTable(
-              columns: [
+              columns: const [
                 DataColumn(label: Text('Modelo')),
                 DataColumn(label: Text('Área')),
                 DataColumn(label: Text('Servicio')),
@@ -55,13 +54,13 @@ class InventarioTabla extends StatelessWidget {
                     Row(
                       children: [
                         IconButton(
-                          icon: Icon(Icons.edit),
+                          icon: const Icon(Icons.edit),
                           onPressed: () {
                             _mostrarFormularioEditar(context, inventario);
                           },
                         ),
                         IconButton(
-                          icon: Icon(Icons.delete),
+                          icon: const Icon(Icons.delete),
                           onPressed: () {
                             _confirmarEliminar(context, inventario);
                           },
@@ -85,73 +84,73 @@ class InventarioTabla extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        final _modeloController =
+        final modeloController =
             TextEditingController(text: inventario.modelo);
-        final _areaController = TextEditingController(text: inventario.area);
-        final _servicioController =
+        final areaController = TextEditingController(text: inventario.area);
+        final servicioController =
             TextEditingController(text: inventario.servicio);
-        final _tipoController = TextEditingController(text: inventario.tipo);
-        final _observacionesController =
+        final tipoController = TextEditingController(text: inventario.tipo);
+        final observacionesController =
             TextEditingController(text: inventario.observaciones);
-        final _marcaTemporalController =
+        final marcaTemporalController =
             TextEditingController(text: inventario.marcaTemporal);
-        final _ipController = TextEditingController(text: inventario.ip);
+        final ipController = TextEditingController(text: inventario.ip);
 
         return AlertDialog(
-          title: Text('Editar Dispositivo'),
+          title: const Text('Editar Dispositivo'),
           content: SingleChildScrollView(
             child: Column(
               children: [
                 TextField(
-                  controller: _modeloController,
-                  decoration: InputDecoration(labelText: 'Modelo'),
+                  controller: modeloController,
+                  decoration: const InputDecoration(labelText: 'Modelo'),
                 ),
                 TextField(
-                  controller: _areaController,
-                  decoration: InputDecoration(labelText: 'Área'),
+                  controller: areaController,
+                  decoration: const InputDecoration(labelText: 'Área'),
                 ),
                 TextField(
-                  controller: _servicioController,
-                  decoration: InputDecoration(labelText: 'Servicio'),
+                  controller: servicioController,
+                  decoration: const InputDecoration(labelText: 'Servicio'),
                 ),
                 TextField(
-                  controller: _tipoController,
-                  decoration: InputDecoration(labelText: 'Tipo'),
+                  controller: tipoController,
+                  decoration: const InputDecoration(labelText: 'Tipo'),
                 ),
                 TextField(
-                  controller: _observacionesController,
-                  decoration: InputDecoration(labelText: 'Observaciones'),
+                  controller: observacionesController,
+                  decoration: const InputDecoration(labelText: 'Observaciones'),
                 ),
                 TextField(
-                  controller: _marcaTemporalController,
-                  decoration: InputDecoration(labelText: 'Marca Temporal'),
+                  controller: marcaTemporalController,
+                  decoration: const InputDecoration(labelText: 'Marca Temporal'),
                 ),
                 TextField(
-                  controller: _ipController,
-                  decoration: InputDecoration(labelText: 'IP'),
+                  controller: ipController,
+                  decoration: const InputDecoration(labelText: 'IP'),
                 ),
               ],
             ),
           ),
           actions: [
             TextButton(
-              child: Text('Cancelar'),
+              child: const Text('Cancelar'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Guardar'),
+              child: const Text('Guardar'),
               onPressed: () async {
                 // Actualizar el dispositivo en la base de datos
                 Dispositivos actualizado = Dispositivos(
-                  modelo: _modeloController.text,
-                  area: _areaController.text,
-                  servicio: _servicioController.text,
-                  tipo: _tipoController.text,
-                  observaciones: _observacionesController.text,
-                  marcaTemporal: _marcaTemporalController.text,
-                  ip: _ipController.text,
+                  modelo: modeloController.text,
+                  area: areaController.text,
+                  servicio: servicioController.text,
+                  tipo: tipoController.text,
+                  observaciones: observacionesController.text,
+                  marcaTemporal: marcaTemporalController.text,
+                  ip: ipController.text,
                 );
                 await _inventarioService.actualizarDispositivo(actualizado);
                 Navigator.of(context).pop(); // Cerrar el diálogo
@@ -170,21 +169,21 @@ class InventarioTabla extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirmar eliminación'),
+          title: const Text('Confirmar eliminación'),
           content:
-              Text('¿Estás seguro de que deseas eliminar este dispositivo?'),
+              const Text('¿Estás seguro de que deseas eliminar este dispositivo?'),
           actions: [
             TextButton(
-              child: Text('Cancelar'),
+              child: const Text('Cancelar'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Eliminar'),
+              child: const Text('Eliminar'),
               onPressed: () async {
                 await _inventarioService
-                    .eliminarDispositivo(inventario.marcaTemporal!);
+                    .eliminarDispositivo(inventario.marcaTemporal);
                 Navigator.of(context).pop();
               },
             ),

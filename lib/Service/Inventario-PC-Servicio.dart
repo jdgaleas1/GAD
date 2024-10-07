@@ -46,11 +46,6 @@ class InventarioService {
 // Método para actualizar un inventario existente en Firestore
   Future<void> actualizarInventario(InventarioPCs inventario) async {
     try {
-      // Verificar que el ID no sea nulo
-      if (inventario.marcaTemporal == null) {
-        throw Exception("La marca temporal inventario no puede ser nulo.");
-      }
-
       // Convertir el objeto InventarioPCs a JSON
       Map<String, dynamic> inventarioData = inventario.toJson();
 

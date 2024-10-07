@@ -124,26 +124,26 @@ Future<void> exportarDatosExcel() async {
   // Llenar las filas con los datos del inventario de PCs
   for (var inventario in inventarioData) {
     sheetPC.appendRow([
-      inventario.marcaTemporal ?? '',
-      inventario.unidad ?? '',
-      inventario.ip ?? '',
-      inventario.nombreDeLaPc ?? '',
-      inventario.nombreDelFuncionario ?? '',
-      inventario.puestoQueOcupa ?? '',
-      inventario.redConectada ?? '',
-      inventario.nombreDeRed ?? '',
-      inventario.dns1 ?? '',
-      inventario.dns2 ?? '',
-      inventario.sistemaOperativo ?? '',
-      inventario.maquinaTodoEnUno ?? '',
-      inventario.caracteristicas ?? '',
-      inventario.laptop ?? '',
-      inventario.codigoActFijos ?? '',
-      inventario.estadoDeComputadora ?? '',
-      inventario.dominio ?? '',
-      inventario.programasLicencias ?? '',
-      inventario.ipRestringidas ?? '',
-      inventario.observaciones ?? '',
+      inventario.marcaTemporal,
+      inventario.unidad,
+      inventario.ip,
+      inventario.nombreDeLaPc,
+      inventario.nombreDelFuncionario,
+      inventario.puestoQueOcupa,
+      inventario.redConectada,
+      inventario.nombreDeRed,
+      inventario.dns1,
+      inventario.dns2,
+      inventario.sistemaOperativo,
+      inventario.maquinaTodoEnUno,
+      inventario.caracteristicas,
+      inventario.laptop,
+      inventario.codigoActFijos,
+      inventario.estadoDeComputadora,
+      inventario.dominio,
+      inventario.programasLicencias,
+      inventario.ipRestringidas,
+      inventario.observaciones,
     ]);
   }
 
@@ -162,13 +162,13 @@ Future<void> exportarDatosExcel() async {
   // Llenar las filas con los datos de los dispositivos
   for (var dispositivo in dispositivosData) {
     sheetDispositivos.appendRow([
-      dispositivo.marcaTemporal ?? '',
-      dispositivo.ip ?? '',
-      dispositivo.modelo ?? '',
-      dispositivo.area ?? '',
-      dispositivo.servicio ?? '',
-      dispositivo.tipo ?? '',
-      dispositivo.observaciones ?? '',
+      dispositivo.marcaTemporal,
+      dispositivo.ip,
+      dispositivo.modelo,
+      dispositivo.area,
+      dispositivo.servicio,
+      dispositivo.tipo,
+      dispositivo.observaciones,
     ]);
   }
 

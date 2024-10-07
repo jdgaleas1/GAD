@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gad/Model/Inventario-PC-model.dart'; // Asegúrate de importar tu modelo
 import 'package:gad/Service/Inventario-PC-Servicio.dart'; 
 import 'package:gad/View/caracteristicas.dart';// Asegúrate de importar el servicio
@@ -88,7 +87,7 @@ class _AgregarPCsState extends State<AgregarPCs> {
       await _inventarioService.guardarInventario(nuevaPC);
       // Mostrar mensaje de éxito
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Guardado exitosamente')),
+        const SnackBar(content: Text('Guardado exitosamente')),
       );
       // Resetear el formulario o navegar de vuelta
       Navigator.pop(context, true);
@@ -131,7 +130,7 @@ class _AgregarPCsState extends State<AgregarPCs> {
                       value: unidad,
                       child: Text(unidad),
                     );
-                  }).toList(),
+                  }),
                   const DropdownMenuItem<String>(
                     value: 'Otra',
                     child: Text('Otra'),
@@ -250,7 +249,7 @@ class _AgregarPCsState extends State<AgregarPCs> {
                       value: red,
                       child: Text(red),
                     );
-                  }).toList(),
+                  }),
                   const DropdownMenuItem<String>(
                     value: 'Otra',
                     child: Text('Otra'),
@@ -488,10 +487,10 @@ class _AgregarPCsState extends State<AgregarPCs> {
                     onPressed: () {
                       Navigator.pop(context, true);
                     },
-                    child: const Text('Cancelar',
-                        style: TextStyle(color: Colors.white)),
                     style:
                         ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                    child: const Text('Cancelar',
+                        style: TextStyle(color: Colors.white)),
                   ),
                 ],
               ),

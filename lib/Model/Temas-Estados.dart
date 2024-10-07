@@ -56,7 +56,7 @@ class AppThemes {
       onSecondary: Colors.black,
     ),
     useMaterial3: true,
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       selectedItemColor: Colors.blue,
       unselectedItemColor: Colors.blueGrey,
     ),

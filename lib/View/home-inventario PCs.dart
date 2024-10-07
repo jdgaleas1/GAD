@@ -16,7 +16,7 @@ class _PCsHomeState extends State<PCsHome> {
   final InventarioService _inventarioService = InventarioService();
   final TextEditingController _searchController = TextEditingController();
   Timer? _debounce;
-  List<String> _editingRows = [];
+  List<String> editingRows = [];
 
   // Función para formatear la dirección IP
   String _formatIP(String? ip) {
@@ -51,9 +51,9 @@ class _PCsHomeState extends State<PCsHome> {
     setState(() {
       _futureInventarios!.then((inventarios) {
         _inventariosFiltrados = inventarios.where((pc) {
-          return pc.codigoActFijos!.toLowerCase().contains(query) ||
-              pc.ip!.toLowerCase().contains(query) ||
-              pc.nombreDelFuncionario!.toLowerCase().contains(query);
+          return pc.codigoActFijos.toLowerCase().contains(query) ||
+              pc.ip.toLowerCase().contains(query) ||
+              pc.nombreDelFuncionario.toLowerCase().contains(query);
         }).toList();
       });
     });
@@ -82,10 +82,10 @@ class _PCsHomeState extends State<PCsHome> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: TextField(
                 controller: _searchController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Buscar por Codigo, IP, o Funcionario',
                   border: InputBorder.none,
-                  prefixIcon: const Icon(Icons.search),
+                  prefixIcon: Icon(Icons.search),
                 ),
               ),
             ),
@@ -159,7 +159,7 @@ class _PCsHomeState extends State<PCsHome> {
 
                   ],
                   rows: inventarios.map((pc) {
-                    bool isEditing = _editingRows.contains(pc.marcaTemporal);
+                    bool isEditing = editingRows.contains(pc.marcaTemporal);
 
                     return DataRow(
                       cells: [
@@ -181,143 +181,143 @@ class _PCsHomeState extends State<PCsHome> {
                             : Text(pc.unidad)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.nombreDeLaPc ?? 'Sin nombre',
+                                initialValue: pc.nombreDeLaPc,
                                 onChanged: (value) {
                                   pc.nombreDeLaPc = value;
                                 },
                               )
-                            : Text(pc.nombreDeLaPc ?? 'Sin nombre')),
+                            : Text(pc.nombreDeLaPc)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.nombreDelFuncionario ?? 'N/A',
+                                initialValue: pc.nombreDelFuncionario,
                                 onChanged: (value) {
                                   pc.nombreDelFuncionario = value;
                                 },
                               )
-                            : Text(pc.nombreDelFuncionario ?? 'N/A')),
+                            : Text(pc.nombreDelFuncionario)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.puestoQueOcupa ?? 'N/A',
+                                initialValue: pc.puestoQueOcupa,
                                 onChanged: (value) {
                                   pc.puestoQueOcupa = value;
                                 },
                               )
-                            : Text(pc.puestoQueOcupa ?? 'N/A')),
+                            : Text(pc.puestoQueOcupa)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.ip ?? 'N/A',
+                                initialValue: pc.ip,
                                 onChanged: (value) {
                                   pc.ip = value;
                                 },
                               )
-                            : Text(pc.ip ?? 'N/A')),
+                            : Text(pc.ip)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.redConectada ?? 'N/A',
+                                initialValue: pc.redConectada,
                                 onChanged: (value) {
                                   pc.redConectada = value;
                                 },
                               )
-                            : Text(pc.redConectada ?? 'N/A')),
+                            : Text(pc.redConectada)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.nombreDeRed ?? 'N/A',
+                                initialValue: pc.nombreDeRed,
                                 onChanged: (value) {
                                   pc.nombreDeRed = value;
                                 },
                               )
-                            : Text(pc.nombreDeRed ?? 'N/A')),
+                            : Text(pc.nombreDeRed)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.dns1 ?? 'N/A',
+                                initialValue: pc.dns1,
                                 onChanged: (value) {
                                   pc.dns1 = value;
                                 },
                               )
-                            : Text(pc.dns1 ?? 'N/A')),
+                            : Text(pc.dns1)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.dns2 ?? 'N/A',
+                                initialValue: pc.dns2,
                                 onChanged: (value) {
                                   pc.dns2 = value;
                                 },
                               )
-                            : Text(pc.dns2 ?? 'N/A')),
+                            : Text(pc.dns2)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.sistemaOperativo ?? 'N/A',
+                                initialValue: pc.sistemaOperativo,
                                 onChanged: (value) {
                                   pc.sistemaOperativo = value;
                                 },
                               )
-                            : Text(pc.sistemaOperativo ?? 'N/A')),
+                            : Text(pc.sistemaOperativo)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.maquinaTodoEnUno ?? 'N/A',
+                                initialValue: pc.maquinaTodoEnUno,
                                 onChanged: (value) {
                                   pc.maquinaTodoEnUno = value;
                                 },
                               )
-                            : Text(pc.maquinaTodoEnUno ?? 'N/A')),
+                            : Text(pc.maquinaTodoEnUno)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.caracteristicas ?? 'N/A',
+                                initialValue: pc.caracteristicas,
                                 onChanged: (value) {
                                   pc.caracteristicas = value;
                                 },
                               )
-                            : Text(pc.caracteristicas ?? 'N/A')),
+                            : Text(pc.caracteristicas)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.laptop ?? 'N/A',
+                                initialValue: pc.laptop,
                                 onChanged: (value) {
                                   pc.laptop = value;
                                 },
                               )
-                            : Text(pc.laptop ?? 'N/A')),
+                            : Text(pc.laptop)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.codigoActFijos ?? 'N/A',
+                                initialValue: pc.codigoActFijos,
                                 onChanged: (value) {
                                   pc.codigoActFijos = value;
                                 },
                               )
-                            : Text(pc.codigoActFijos ?? 'N/A')),
+                            : Text(pc.codigoActFijos)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.estadoDeComputadora ?? 'N/A',
+                                initialValue: pc.estadoDeComputadora,
                                 onChanged: (value) {
                                   pc.estadoDeComputadora = value;
                                 },
                               )
-                            : Text(pc.estadoDeComputadora ?? 'N/A')),
+                            : Text(pc.estadoDeComputadora)),
                         DataCell(isEditing
-                            ? TextFormField(initialValue: pc.dominio ?? 'N/A')
-                            : Text(pc.dominio ?? 'N/A')),
+                            ? TextFormField(initialValue: pc.dominio)
+                            : Text(pc.dominio)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.programasLicencias ?? 'N/A',
+                                initialValue: pc.programasLicencias,
                                 onChanged: (value) {
                                   pc.programasLicencias = value;
                                 },
                               )
-                            : Text(pc.programasLicencias ?? 'N/A')),
+                            : Text(pc.programasLicencias)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.ipRestringidas ?? 'N/A',
+                                initialValue: pc.ipRestringidas,
                                 onChanged: (value) {
                                   pc.ipRestringidas = value;
                                 },
                               )
-                            : Text(pc.ipRestringidas ?? 'N/A')),
+                            : Text(pc.ipRestringidas)),
                         DataCell(isEditing
                             ? TextFormField(
-                                initialValue: pc.observaciones ?? 'N/A',
+                                initialValue: pc.observaciones,
                                 onChanged: (value) {
                                   pc.observaciones = value;
                                 },
                               )
-                            : Text(pc.observaciones ?? 'N/A')),
+                            : Text(pc.observaciones)),
                         DataCell(
                           IconButton(
                             icon: isEditing
@@ -328,9 +328,9 @@ class _PCsHomeState extends State<PCsHome> {
                                 if (isEditing) {
                                   // Actualiza el inventario en Firestore
                                   _inventarioService.actualizarInventario(pc);
-                                  _editingRows.remove(pc.marcaTemporal);
+                                  editingRows.remove(pc.marcaTemporal);
                                 } else {
-                                  _editingRows.add(pc.marcaTemporal!);
+                                  editingRows.add(pc.marcaTemporal);
                                 }
                               });
                             },
@@ -338,28 +338,28 @@ class _PCsHomeState extends State<PCsHome> {
                         ),
                         DataCell(
                               IconButton(
-                                icon: Icon(Icons.delete),
+                                icon: const Icon(Icons.delete),
                                 onPressed: () {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: Text("Confirmar eliminación"),
-                                        content: Text("¿Estás seguro de que deseas eliminar este PC?"),
+                                        title: const Text("Confirmar eliminación"),
+                                        content: const Text("¿Estás seguro de que deseas eliminar este PC?"),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
                                               Navigator.of(context).pop(); // Cerrar el diálogo
                                             },
-                                            child: Text("Cancelar"),
+                                            child: const Text("Cancelar"),
                                           ),
                                           TextButton(
                                             onPressed: () {
-                                              _inventarioService.eliminarPC(pc.marcaTemporal!);
+                                              _inventarioService.eliminarPC(pc.marcaTemporal);
                                               _refreshPCs(); // Refrescar la lista después de eliminar
                                               Navigator.of(context).pop(); // Cerrar el diálogo
                                             },
-                                            child: Text("Eliminar"),
+                                            child: const Text("Eliminar"),
                                           ),
                                         ],
                                       );
@@ -368,9 +368,6 @@ class _PCsHomeState extends State<PCsHome> {
                                 },
                               ),
                             ),
-
-
-
                       ],
                     );
                   }).toList(),

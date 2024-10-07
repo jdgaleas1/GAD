@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gad/Model/Dispositivos-PC-model.dart'; // Asegúrate de que este modelo esté correctamente definido
 import 'package:gad/Service/Dispositivos-PC-Servicio.dart'; // Importa el servicio donde guardas los datos
 
@@ -29,104 +28,109 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Agregar Dispositivo'),
+        title: const Text('Agregar Dispositivo'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: modeloController,
-                decoration: InputDecoration(labelText: 'Modelo'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Ingrese el modelo';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: areaController,
-                decoration: InputDecoration(labelText: 'Área'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Ingrese el área';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: servicioController,
-                decoration: InputDecoration(labelText: 'Servicio'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Ingrese el servicio';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: tipoController,
-                decoration: InputDecoration(labelText: 'Tipo'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Ingrese el tipo';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: observacionesController,
-                decoration: InputDecoration(labelText: 'Observaciones'),
-              ),
-              TextFormField(
-                controller: marcaTemporalController,
-                decoration: InputDecoration(labelText: 'Marca Temporal'),
-              ),
-              TextFormField(
-                controller: ipController,
-                decoration: InputDecoration(labelText: 'IP'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Ingrese la IP';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    // Crear una instancia de tu modelo
-                    Dispositivos nuevoDispositivo = Dispositivos(
-                      modelo: modeloController.text,
-                      area: areaController.text,
-                      servicio: servicioController.text,
-                      tipo: tipoController.text,
-                      observaciones: observacionesController.text,
-                      marcaTemporal: marcaTemporalController.text.isNotEmpty
-                          ? marcaTemporalController.text
-                          : DateTime.now()
-                              .toString(), // Si la marca temporal está vacía, usa la fecha actual
-                      ip: ipController.text,
-                    );
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start, // Alineación izquierda
+              children: [
+                TextFormField(
+                  controller: modeloController,
+                  decoration: const InputDecoration(labelText: 'Modelo'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Ingrese el modelo';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: areaController,
+                  decoration: const InputDecoration(labelText: 'Área'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Ingrese el área';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: servicioController,
+                  decoration: const InputDecoration(labelText: 'Servicio'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Ingrese el servicio';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: tipoController,
+                  decoration: const InputDecoration(labelText: 'Tipo'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Ingrese el tipo';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: observacionesController,
+                  decoration: const InputDecoration(labelText: 'Observaciones'),
+                ),
+                TextFormField(
+                  controller: marcaTemporalController,
+                  decoration: const InputDecoration(labelText: 'Marca Temporal'),
+                ),
+                TextFormField(
+                  controller: ipController,
+                  decoration: const InputDecoration(labelText: 'IP'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Ingrese la IP';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 20),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        // Crear una instancia de tu modelo
+                        Dispositivos nuevoDispositivo = Dispositivos(
+                          modelo: modeloController.text,
+                          area: areaController.text,
+                          servicio: servicioController.text,
+                          tipo: tipoController.text,
+                          observaciones: observacionesController.text,
+                          marcaTemporal: marcaTemporalController.text.isNotEmpty
+                              ? marcaTemporalController.text
+                              : DateTime.now()
+                                  .toString(), // Si la marca temporal está vacía, usa la fecha actual
+                          ip: ipController.text,
+                        );
 
-                    // Llamar al servicio para guardar el dispositivo
-                    await _inventarioService
-                        .guardarInventario(nuevoDispositivo);
+                        // Llamar al servicio para guardar el dispositivo
+                        await _inventarioService
+                            .guardarInventario(nuevoDispositivo);
 
-                    // Mostrar mensaje de éxito y regresar a la pantalla anterior
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Dispositivo guardado con éxito')),
-                    );
-                    Navigator.pop(context);
-                  }
-                },
-                child: Text('Guardar'),
-              ),
-            ],
+                        // Mostrar mensaje de éxito y regresar a la pantalla anterior
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Dispositivo guardado con éxito')),
+                        );
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: const Text('Guardar'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
