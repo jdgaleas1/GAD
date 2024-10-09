@@ -32,24 +32,25 @@ class InventarioTabla extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: DataTable(
               columns: const [
+                DataColumn(label: Text('Marca Temporal')),
+                DataColumn(label: Text('IP')),
                 DataColumn(label: Text('Modelo')),
                 DataColumn(label: Text('Área')),
                 DataColumn(label: Text('Servicio')),
                 DataColumn(label: Text('Tipo')),
                 DataColumn(label: Text('Observaciones')),
-                DataColumn(label: Text('Marca Temporal')),
-                DataColumn(label: Text('IP')),
                 DataColumn(label: Text('Acciones')), // Columna para acciones
               ],
               rows: snapshot.data!.map((inventario) {
                 return DataRow(cells: [
+                  DataCell(Text(inventario.marcaTemporal)),
+                  DataCell(Text(inventario.ip)),
                   DataCell(Text(inventario.modelo)),
                   DataCell(Text(inventario.area)),
                   DataCell(Text(inventario.servicio)),
                   DataCell(Text(inventario.tipo)),
                   DataCell(Text(inventario.observaciones)),
-                  DataCell(Text(inventario.marcaTemporal)),
-                  DataCell(Text(inventario.ip)),
+
                   DataCell(
                     Row(
                       children: [
@@ -84,6 +85,9 @@ class InventarioTabla extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+                final marcaTemporalController =
+            TextEditingController(text: inventario.marcaTemporal);
+        final ipController = TextEditingController(text: inventario.ip);
         final modeloController =
             TextEditingController(text: inventario.modelo);
         final areaController = TextEditingController(text: inventario.area);
@@ -92,15 +96,21 @@ class InventarioTabla extends StatelessWidget {
         final tipoController = TextEditingController(text: inventario.tipo);
         final observacionesController =
             TextEditingController(text: inventario.observaciones);
-        final marcaTemporalController =
-            TextEditingController(text: inventario.marcaTemporal);
-        final ipController = TextEditingController(text: inventario.ip);
+
 
         return AlertDialog(
           title: const Text('Editar Dispositivo'),
           content: SingleChildScrollView(
             child: Column(
               children: [
+                TextField(
+                  controller: marcaTemporalController,
+                  decoration: const InputDecoration(labelText: 'Marca Temporal'),
+                ),
+                TextField(
+                  controller: ipController,
+                  decoration: const InputDecoration(labelText: 'IP'),
+                ),
                 TextField(
                   controller: modeloController,
                   decoration: const InputDecoration(labelText: 'Modelo'),
@@ -121,14 +131,6 @@ class InventarioTabla extends StatelessWidget {
                   controller: observacionesController,
                   decoration: const InputDecoration(labelText: 'Observaciones'),
                 ),
-                TextField(
-                  controller: marcaTemporalController,
-                  decoration: const InputDecoration(labelText: 'Marca Temporal'),
-                ),
-                TextField(
-                  controller: ipController,
-                  decoration: const InputDecoration(labelText: 'IP'),
-                ),
               ],
             ),
           ),
@@ -144,13 +146,14 @@ class InventarioTabla extends StatelessWidget {
               onPressed: () async {
                 // Actualizar el dispositivo en la base de datos
                 Dispositivos actualizado = Dispositivos(
+                  marcaTemporal: marcaTemporalController.text,
+                  ip: ipController.text,
                   modelo: modeloController.text,
                   area: areaController.text,
                   servicio: servicioController.text,
                   tipo: tipoController.text,
                   observaciones: observacionesController.text,
-                  marcaTemporal: marcaTemporalController.text,
-                  ip: ipController.text,
+
                 );
                 await _inventarioService.actualizarDispositivo(actualizado);
                 Navigator.of(context).pop(); // Cerrar el diálogo
