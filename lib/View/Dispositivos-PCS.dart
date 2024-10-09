@@ -19,8 +19,9 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
   final observacionesController = TextEditingController();
   final marcaTemporalController = TextEditingController();
   final ipController = TextEditingController();
-  final encargadoController =TextEditingController();
+  final encargadoController = TextEditingController();
   final codigoActFijosDispositivosController = TextEditingController();
+  final custodioController = TextEditingController();
 
   // Instancia del servicio
   final InventarioServiceDispositivos _inventarioService =
@@ -38,11 +39,13 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
           child: Form(
             key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, // Alineación izquierda
+              crossAxisAlignment:
+                  CrossAxisAlignment.start, // Alineación izquierda
               children: [
                 TextFormField(
                   controller: marcaTemporalController,
-                  decoration: const InputDecoration(labelText: 'Marca Temporal'),
+                  decoration:
+                      const InputDecoration(labelText: 'Marca Temporal'),
                 ),
                 TextFormField(
                   controller: ipController,
@@ -100,14 +103,26 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
                 ),
                 TextFormField(
                   controller: encargadoController,
-                  decoration: const InputDecoration(labelText: 'Encargado del dispositivo'),
+                  decoration: const InputDecoration(
+                      labelText: 'Encargado del dispositivo'),
                 ),
                 TextFormField(
                   controller: codigoActFijosDispositivosController,
-                  decoration: const InputDecoration(labelText: 'Codigo Act Fijos'),
+                  decoration:
+                      const InputDecoration(labelText: 'Codigo Act Fijos'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Ingrese la IP';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: custodioController,
+                  decoration: const InputDecoration(labelText: 'Custodio'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Ingrese el Custodio';
                     }
                     return null;
                   },
@@ -129,9 +144,10 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
                           servicio: servicioController.text,
                           tipo: tipoController.text,
                           encargado: encargadoController.text,
-                          codigoActFijosDispositivos: codigoActFijosDispositivosController.text,
+                          codigoActFijosDispositivos:
+                              codigoActFijosDispositivosController.text,
                           observaciones: observacionesController.text,
-
+                          custodio: custodioController.text,
                         );
 
                         // Llamar al servicio para guardar el dispositivo
@@ -140,7 +156,8 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
 
                         // Mostrar mensaje de éxito y regresar a la pantalla anterior
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Dispositivo guardado con éxito')),
+                          const SnackBar(
+                              content: Text('Dispositivo guardado con éxito')),
                         );
                         Navigator.pop(context);
                       }

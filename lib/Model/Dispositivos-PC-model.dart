@@ -16,7 +16,7 @@ class Dispositivos {
   String encargado;
   String codigoActFijosDispositivos;
   String observaciones;
-
+  String custodio;
 
   Dispositivos({
     required this.marcaTemporal,
@@ -28,6 +28,7 @@ class Dispositivos {
     required this.encargado,
     required this.codigoActFijosDispositivos,
     required this.observaciones,
+    required this.custodio,
   });
 
   factory Dispositivos.fromJson(Map<String, dynamic> json) => Dispositivos(
@@ -40,7 +41,7 @@ class Dispositivos {
         encargado: json["encargado"] ?? '',
         codigoActFijosDispositivos: json["codigo Act Fijos"] ?? '',
         observaciones: json["Observaciones"] ?? '',
-
+        custodio: json["Custodio"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -50,8 +51,9 @@ class Dispositivos {
         "Área": area,
         "Servicio": servicio,
         "Tipo": tipo,
-        "encargado":encargado,
+        "encargado": encargado,
         "codigo Act Fijos": codigoActFijosDispositivos,
         "Observaciones": observaciones,
+        "Custodio": custodio,
       };
 }

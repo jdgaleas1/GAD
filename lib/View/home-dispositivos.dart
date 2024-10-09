@@ -41,6 +41,7 @@ class InventarioTabla extends StatelessWidget {
                 DataColumn(label: Text('Encargado')),
                 DataColumn(label: Text('Codigo Act Fijos Dispositivos')),
                 DataColumn(label: Text('Observaciones')),
+                DataColumn(label: Text('Custodio')),
                 DataColumn(label: Text('Acciones')), // Columna para acciones
               ],
               rows: snapshot.data!.map((inventario) {
@@ -54,7 +55,7 @@ class InventarioTabla extends StatelessWidget {
                   DataCell(Text(inventario.encargado)),
                   DataCell(Text(inventario.codigoActFijosDispositivos)),
                   DataCell(Text(inventario.observaciones)),
-
+                  DataCell(Text(inventario.custodio)),
                   DataCell(
                     Row(
                       children: [
@@ -83,17 +84,15 @@ class InventarioTabla extends StatelessWidget {
   }
 
   // Función para mostrar el formulario de edición
-  void _mostrarFormularioEditar(
-      BuildContext context, Dispositivos inventario) {
+  void _mostrarFormularioEditar(BuildContext context, Dispositivos inventario) {
     // Abre una nueva página o muestra un formulario en un diálogo para editar los datos.
     showDialog(
       context: context,
       builder: (BuildContext context) {
-                final marcaTemporalController =
+        final marcaTemporalController =
             TextEditingController(text: inventario.marcaTemporal);
         final ipController = TextEditingController(text: inventario.ip);
-        final modeloController =
-            TextEditingController(text: inventario.modelo);
+        final modeloController = TextEditingController(text: inventario.modelo);
         final areaController = TextEditingController(text: inventario.area);
         final servicioController =
             TextEditingController(text: inventario.servicio);
@@ -104,7 +103,8 @@ class InventarioTabla extends StatelessWidget {
             TextEditingController(text: inventario.codigoActFijosDispositivos);
         final observacionesController =
             TextEditingController(text: inventario.observaciones);
-
+        final custodioController =
+            TextEditingController(text: inventario.custodio);
 
         return AlertDialog(
           title: const Text('Editar Dispositivo'),
@@ -113,7 +113,8 @@ class InventarioTabla extends StatelessWidget {
               children: [
                 TextField(
                   controller: marcaTemporalController,
-                  decoration: const InputDecoration(labelText: 'Marca Temporal'),
+                  decoration:
+                      const InputDecoration(labelText: 'Marca Temporal'),
                 ),
                 TextField(
                   controller: ipController,
@@ -141,11 +142,16 @@ class InventarioTabla extends StatelessWidget {
                 ),
                 TextField(
                   controller: codigoActFijosDispositivosController,
-                  decoration: const InputDecoration(labelText: 'Codigo Act Fijos'),
+                  decoration:
+                      const InputDecoration(labelText: 'Codigo Act Fijos'),
                 ),
                 TextField(
                   controller: observacionesController,
                   decoration: const InputDecoration(labelText: 'Observaciones'),
+                ),
+                TextField(
+                  controller: custodioController,
+                  decoration: const InputDecoration(labelText: 'Custodio'),
                 ),
               ],
             ),
@@ -169,9 +175,10 @@ class InventarioTabla extends StatelessWidget {
                   servicio: servicioController.text,
                   tipo: tipoController.text,
                   encargado: encargadoController.text,
-                  codigoActFijosDispositivos: codigoActFijosDispositivosController.text,
+                  codigoActFijosDispositivos:
+                      codigoActFijosDispositivosController.text,
                   observaciones: observacionesController.text,
-
+                  custodio: custodioController.text,
                 );
                 await _inventarioService.actualizarDispositivo(actualizado);
                 Navigator.of(context).pop(); // Cerrar el diálogo
@@ -184,15 +191,14 @@ class InventarioTabla extends StatelessWidget {
   }
 
   // Función para confirmar y eliminar el dispositivo
-  void _confirmarEliminar(
-      BuildContext context, Dispositivos inventario) {
+  void _confirmarEliminar(BuildContext context, Dispositivos inventario) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Confirmar eliminación'),
-          content:
-              const Text('¿Estás seguro de que deseas eliminar este dispositivo?'),
+          content: const Text(
+              '¿Estás seguro de que deseas eliminar este dispositivo?'),
           actions: [
             TextButton(
               child: const Text('Cancelar'),
