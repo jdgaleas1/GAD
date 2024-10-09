@@ -13,6 +13,8 @@ class Dispositivos {
   String area;
   String servicio;
   String tipo;
+  String encargado;
+  String codigoActFijosDispositivos;
   String observaciones;
 
 
@@ -23,6 +25,8 @@ class Dispositivos {
     required this.area,
     required this.servicio,
     required this.tipo,
+    required this.encargado,
+    required this.codigoActFijosDispositivos,
     required this.observaciones,
   });
 
@@ -33,6 +37,8 @@ class Dispositivos {
         area: json["Área"] ?? '',
         servicio: json["Servicio"] ?? '',
         tipo: json["Tipo"] ?? '',
+        encargado: json["encargado"] ?? '',
+        codigoActFijosDispositivos: json["codigo Act Fijos"] ?? '',
         observaciones: json["Observaciones"] ?? '',
 
       );
@@ -44,6 +50,8 @@ class Dispositivos {
         "Área": area,
         "Servicio": servicio,
         "Tipo": tipo,
+        "encargado":encargado,
+        "codigo Act Fijos": codigoActFijosDispositivos,
         "Observaciones": observaciones,
       };
 }

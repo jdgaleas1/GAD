@@ -72,13 +72,16 @@ Future<void> seleccionarArchivoExcel() async {
           break;
         }
         Dispositivos nuevoDispositivo = Dispositivos(
-          modelo: row[0]?.value.toString() ?? '',
-          area: row[1]?.value.toString() ?? '',
-          servicio: row[2]?.value.toString() ?? '',
-          tipo: row[3]?.value.toString() ?? '',
-          observaciones: row[4]?.value.toString() ?? '',
-          marcaTemporal: row[5]?.value.toString() ?? '',
-          ip: row[6]?.value.toString() ?? '',
+          marcaTemporal: row[0]?.value.toString() ?? '',
+          ip: row[1]?.value.toString() ?? '',
+          modelo: row[2]?.value.toString() ?? '',
+          area: row[3]?.value.toString() ?? '',
+          servicio: row[4]?.value.toString() ?? '',
+          tipo: row[5]?.value.toString() ?? '',
+          encargado: row[6]?.value.toString() ?? '',
+          codigoActFijosDispositivos: row[7]?.value.toString() ?? '',
+          observaciones: row[8]?.value.toString() ?? '',
+
         );
         await _inventarioServiceDispositivos.guardarInventario(nuevoDispositivo);
       }

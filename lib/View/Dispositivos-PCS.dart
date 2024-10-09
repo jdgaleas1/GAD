@@ -19,6 +19,8 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
   final observacionesController = TextEditingController();
   final marcaTemporalController = TextEditingController();
   final ipController = TextEditingController();
+  final encargadoController =TextEditingController();
+  final codigoActFijosDispositivosController = TextEditingController();
 
   // Instancia del servicio
   final InventarioServiceDispositivos _inventarioService =
@@ -38,6 +40,20 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start, // Alineación izquierda
               children: [
+                TextFormField(
+                  controller: marcaTemporalController,
+                  decoration: const InputDecoration(labelText: 'Marca Temporal'),
+                ),
+                TextFormField(
+                  controller: ipController,
+                  decoration: const InputDecoration(labelText: 'IP'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Ingrese la IP';
+                    }
+                    return null;
+                  },
+                ),
                 TextFormField(
                   controller: modeloController,
                   decoration: const InputDecoration(labelText: 'Modelo'),
@@ -83,12 +99,12 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
                   decoration: const InputDecoration(labelText: 'Observaciones'),
                 ),
                 TextFormField(
-                  controller: marcaTemporalController,
-                  decoration: const InputDecoration(labelText: 'Marca Temporal'),
+                  controller: encargadoController,
+                  decoration: const InputDecoration(labelText: 'Encargado del dispositivo'),
                 ),
                 TextFormField(
-                  controller: ipController,
-                  decoration: const InputDecoration(labelText: 'IP'),
+                  controller: codigoActFijosDispositivosController,
+                  decoration: const InputDecoration(labelText: 'Codigo Act Fijos'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Ingrese la IP';
@@ -103,16 +119,19 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
                       if (_formKey.currentState!.validate()) {
                         // Crear una instancia de tu modelo
                         Dispositivos nuevoDispositivo = Dispositivos(
-                          modelo: modeloController.text,
-                          area: areaController.text,
-                          servicio: servicioController.text,
-                          tipo: tipoController.text,
-                          observaciones: observacionesController.text,
                           marcaTemporal: marcaTemporalController.text.isNotEmpty
                               ? marcaTemporalController.text
                               : DateTime.now()
                                   .toString(), // Si la marca temporal está vacía, usa la fecha actual
                           ip: ipController.text,
+                          modelo: modeloController.text,
+                          area: areaController.text,
+                          servicio: servicioController.text,
+                          tipo: tipoController.text,
+                          encargado: encargadoController.text,
+                          codigoActFijosDispositivos: codigoActFijosDispositivosController.text,
+                          observaciones: observacionesController.text,
+
                         );
 
                         // Llamar al servicio para guardar el dispositivo

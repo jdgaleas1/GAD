@@ -38,6 +38,8 @@ class InventarioTabla extends StatelessWidget {
                 DataColumn(label: Text('Área')),
                 DataColumn(label: Text('Servicio')),
                 DataColumn(label: Text('Tipo')),
+                DataColumn(label: Text('Encargado')),
+                DataColumn(label: Text('Codigo Act Fijos Dispositivos')),
                 DataColumn(label: Text('Observaciones')),
                 DataColumn(label: Text('Acciones')), // Columna para acciones
               ],
@@ -49,6 +51,8 @@ class InventarioTabla extends StatelessWidget {
                   DataCell(Text(inventario.area)),
                   DataCell(Text(inventario.servicio)),
                   DataCell(Text(inventario.tipo)),
+                  DataCell(Text(inventario.encargado)),
+                  DataCell(Text(inventario.codigoActFijosDispositivos)),
                   DataCell(Text(inventario.observaciones)),
 
                   DataCell(
@@ -94,6 +98,10 @@ class InventarioTabla extends StatelessWidget {
         final servicioController =
             TextEditingController(text: inventario.servicio);
         final tipoController = TextEditingController(text: inventario.tipo);
+        final encargadoController =
+            TextEditingController(text: inventario.encargado);
+        final codigoActFijosDispositivosController =
+            TextEditingController(text: inventario.codigoActFijosDispositivos);
         final observacionesController =
             TextEditingController(text: inventario.observaciones);
 
@@ -128,6 +136,14 @@ class InventarioTabla extends StatelessWidget {
                   decoration: const InputDecoration(labelText: 'Tipo'),
                 ),
                 TextField(
+                  controller: encargadoController,
+                  decoration: const InputDecoration(labelText: 'Encargado'),
+                ),
+                TextField(
+                  controller: codigoActFijosDispositivosController,
+                  decoration: const InputDecoration(labelText: 'Codigo Act Fijos'),
+                ),
+                TextField(
                   controller: observacionesController,
                   decoration: const InputDecoration(labelText: 'Observaciones'),
                 ),
@@ -152,6 +168,8 @@ class InventarioTabla extends StatelessWidget {
                   area: areaController.text,
                   servicio: servicioController.text,
                   tipo: tipoController.text,
+                  encargado: encargadoController.text,
+                  codigoActFijosDispositivos: codigoActFijosDispositivosController.text,
                   observaciones: observacionesController.text,
 
                 );
