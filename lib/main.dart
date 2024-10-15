@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     // Inicialización de los contenidos de las pestañas
     _content = [
-      const PCsHome(),
+       PCsHome(),
     ];
   }
 
@@ -75,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void seleccionarArchivoExcel() async {
     await _importarExportar.seleccionarArchivoExcel();
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Datos del Excel subidos exitosamente')),
+       SnackBar(content: Text('Datos del Excel subidos exitosamente')),
     );
   }
 
@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void exportarDatos() async {
     await _importarExportar.exportarDatosExcel();
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Datos exportados exitosamente')),
+       SnackBar(content: Text('Datos exportados exitosamente')),
     );
   }
 

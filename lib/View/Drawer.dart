@@ -10,7 +10,7 @@ class CustomDrawer extends StatelessWidget {
   final VoidCallback seleccionarArchivoExcel;
   final VoidCallback exportarDatos;
 
-  const CustomDrawer({
+   CustomDrawer({
     super.key,
     required this.onItemTapped,
     required this.seleccionarArchivoExcel,
@@ -24,7 +24,7 @@ class CustomDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/gad_drawer.png'),
                 fit: BoxFit.cover,
@@ -34,14 +34,14 @@ class CustomDrawer extends StatelessWidget {
             padding: EdgeInsets.zero,
             child: Container(),
           ),
-          const SizedBox(height: 16),
+           SizedBox(height: 16),
           Column(
             children: [
-              const CircleAvatar(
+               CircleAvatar(
                 backgroundImage: AssetImage('assets/images/avatar.png'),
                 radius: 40,
               ),
-              const SizedBox(height: 10),
+               SizedBox(height: 10),
               Text(
                 'GAD EC',
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
@@ -52,18 +52,18 @@ class CustomDrawer extends StatelessWidget {
             ],
           ),
           ListTile(
-            leading: const Icon(Icons.fact_check),
-            title: const Text('Inventario Nuevo'),
+            leading:  Icon(Icons.fact_check),
+            title:  Text('Inventario Nuevo'),
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const AgregarPCs()),
+                MaterialPageRoute(builder: (context) =>  AgregarPCs()),
               );
             },
           ),
           ListTile(
-            leading: const Icon(Icons.view_list),
-            title: const Text('Ver Dispositivos'),
+            leading:  Icon(Icons.view_list),
+            title:  Text('Ver Dispositivos'),
             onTap: () {
               Navigator.push(
                 context,
@@ -73,8 +73,8 @@ class CustomDrawer extends StatelessWidget {
           ),  
           // Nuevo ListTile para agregar dispositivos
           ListTile(
-            leading: const Icon(Icons.add_circle),
-            title: const Text('Agregar Dispositivos'),
+            leading:  Icon(Icons.add_circle),
+            title:  Text('Agregar Dispositivos'),
             onTap: () {
               Navigator.push(
                 context,
@@ -85,20 +85,20 @@ class CustomDrawer extends StatelessWidget {
           ),
           // El nuevo ExpansionTile para Importar/Exportar
           ExpansionTile(
-            leading: const Icon(Icons.import_export),
-            title: const Text('Importar/Exportar'),
+            leading:  Icon(Icons.import_export),
+            title:  Text('Importar/Exportar'),
             children: <Widget>[
               ListTile(
-                leading: const Icon(Icons.upload_file),
-                title: const Text('Importar'),
+                leading:  Icon(Icons.upload_file),
+                title:  Text('Importar'),
                 onTap: () {
                   seleccionarArchivoExcel(); // Llama a la función de importar
                   Navigator.pop(context); // Cierra el drawer
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.download),
-                title: const Text('Exportar'),
+                leading:  Icon(Icons.download),
+                title:  Text('Exportar'),
                 onTap: () {
                 exportarDatos(); // 
                   Navigator.pop(context); // Cierra el drawer
@@ -108,11 +108,11 @@ class CustomDrawer extends StatelessWidget {
           ),
 
           ExpansionTile(
-            leading: const Icon(Icons.settings),
-            title: const Text('Configuración'),
+            leading:  Icon(Icons.settings),
+            title:  Text('Configuración'),
             children: <Widget>[
               SwitchListTile(
-                title: const Text('Tema Claro'),
+                title:  Text('Tema Claro'),
                 value: Provider.of<ThemeProvider>(context).getTheme() ==
                     AppThemes.lightTheme,
                 onChanged: (value) {
@@ -121,7 +121,7 @@ class CustomDrawer extends StatelessWidget {
                 },
               ),
               SwitchListTile(
-                title: const Text('Tema Oscuro'),
+                title:  Text('Tema Oscuro'),
                 value: Provider.of<ThemeProvider>(context).getTheme() ==
                     AppThemes.darkTheme,
                 onChanged: (value) {
@@ -130,7 +130,7 @@ class CustomDrawer extends StatelessWidget {
                 },
               ),
               SwitchListTile(
-                title: const Text('Tema Azul'),
+                title:  Text('Tema Azul'),
                 value: Provider.of<ThemeProvider>(context).getTheme() ==
                     AppThemes.blueTheme,
                 onChanged: (value) {
@@ -139,7 +139,7 @@ class CustomDrawer extends StatelessWidget {
                 },
               ),
               SwitchListTile(
-                title: const Text('Tema Rosa'),
+                title:  Text('Tema Rosa'),
                 value: Provider.of<ThemeProvider>(context).getTheme() ==
                     AppThemes.pinkTheme,
                 onChanged: (value) {

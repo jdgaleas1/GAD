@@ -4,7 +4,7 @@ import 'package:gad/Service/Inventario-PC-Servicio.dart';
 import 'package:gad/Model/Inventario-PC-model.dart';
 
 class PCsHome extends StatefulWidget {
-  const PCsHome({super.key});
+   PCsHome({super.key});
 
   @override
   State<PCsHome> createState() => _PCsHomeState();
@@ -36,7 +36,7 @@ class _PCsHomeState extends State<PCsHome> {
   void _onSearchChanged() {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     if (_searchController.text.length >= 4) {
-      _debounce = Timer(const Duration(milliseconds: 500), () {
+      _debounce = Timer( Duration(milliseconds: 500), () {
         _filterInventarios();
       });
     } else {
@@ -79,10 +79,10 @@ class _PCsHomeState extends State<PCsHome> {
         actions: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding:  EdgeInsets.symmetric(vertical: 8.0),
               child: TextField(
                 controller: _searchController,
-                decoration: const InputDecoration(
+                decoration:  InputDecoration(
                   hintText: 'Buscar por Codigo, IP, o Funcionario',
                   border: InputBorder.none,
                   prefixIcon: Icon(Icons.search),
@@ -97,7 +97,7 @@ class _PCsHomeState extends State<PCsHome> {
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              const PopupMenuItem<String>(
+               PopupMenuItem<String>(
                 value: 'refrescar',
                 child: ListTile(
                   leading: Icon(Icons.refresh),
@@ -112,11 +112,11 @@ class _PCsHomeState extends State<PCsHome> {
         future: _futureInventarios,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return  Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(child: Text('Error al cargar los datos'));
+            return  Center(child: Text('Error al cargar los datos'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No hay datos disponibles'));
+            return  Center(child: Text('No hay datos disponibles'));
           } else {
             var inventarios = _inventariosFiltrados.isNotEmpty
                 ? _inventariosFiltrados
@@ -133,7 +133,7 @@ class _PCsHomeState extends State<PCsHome> {
                 scrollDirection: Axis.vertical,
                 child: DataTable(
                   dataRowHeight: 160,
-                  columns: const [
+                  columns:  [
                     DataColumn(label: Text('Marca Temporal')),
                     DataColumn(label: Text('Unidad')),
                     DataColumn(label: Text('Nombre de la PC')),
@@ -321,8 +321,8 @@ class _PCsHomeState extends State<PCsHome> {
                         DataCell(
                           IconButton(
                             icon: isEditing
-                                ? const Icon(Icons.save)
-                                : const Icon(Icons.edit),
+                                ?  Icon(Icons.save)
+                                :  Icon(Icons.edit),
                             onPressed: () async {
                               setState(() {
                                 if (isEditing) {
@@ -338,20 +338,20 @@ class _PCsHomeState extends State<PCsHome> {
                         ),
                         DataCell(
                               IconButton(
-                                icon: const Icon(Icons.delete),
+                                icon:  Icon(Icons.delete),
                                 onPressed: () {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: const Text("Confirmar eliminación"),
-                                        content: const Text("¿Estás seguro de que deseas eliminar este PC?"),
+                                        title:  Text("Confirmar eliminación"),
+                                        content:  Text("¿Estás seguro de que deseas eliminar este PC?"),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
                                               Navigator.of(context).pop(); // Cerrar el diálogo
                                             },
-                                            child: const Text("Cancelar"),
+                                            child:  Text("Cancelar"),
                                           ),
                                           TextButton(
                                             onPressed: () {
@@ -359,7 +359,7 @@ class _PCsHomeState extends State<PCsHome> {
                                               _refreshPCs(); // Refrescar la lista después de eliminar
                                               Navigator.of(context).pop(); // Cerrar el diálogo
                                             },
-                                            child: const Text("Eliminar"),
+                                            child:  Text("Eliminar"),
                                           ),
                                         ],
                                       );

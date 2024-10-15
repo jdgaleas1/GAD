@@ -31,11 +31,11 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Agregar Dispositivo'),
+        title: Text('Agregar Dispositivo'),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -45,11 +45,11 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
                 TextFormField(
                   controller: marcaTemporalController,
                   decoration:
-                      const InputDecoration(labelText: 'Marca Temporal'),
+                      InputDecoration(labelText: 'Marca Temporal'),
                 ),
                 TextFormField(
                   controller: ipController,
-                  decoration: const InputDecoration(labelText: 'IP'),
+                  decoration: InputDecoration(labelText: 'IP'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Ingrese la IP';
@@ -59,7 +59,7 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
                 ),
                 TextFormField(
                   controller: modeloController,
-                  decoration: const InputDecoration(labelText: 'Modelo'),
+                  decoration: InputDecoration(labelText: 'Modelo'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Ingrese el modelo';
@@ -69,7 +69,7 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
                 ),
                 TextFormField(
                   controller: areaController,
-                  decoration: const InputDecoration(labelText: 'Área'),
+                  decoration: InputDecoration(labelText: 'Área'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Ingrese el área';
@@ -79,7 +79,7 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
                 ),
                 TextFormField(
                   controller: servicioController,
-                  decoration: const InputDecoration(labelText: 'Servicio'),
+                  decoration: InputDecoration(labelText: 'Servicio'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Ingrese el servicio';
@@ -89,7 +89,7 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
                 ),
                 TextFormField(
                   controller: tipoController,
-                  decoration: const InputDecoration(labelText: 'Tipo'),
+                  decoration: InputDecoration(labelText: 'Tipo'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Ingrese el tipo';
@@ -99,17 +99,17 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
                 ),
                 TextFormField(
                   controller: observacionesController,
-                  decoration: const InputDecoration(labelText: 'Observaciones'),
+                  decoration: InputDecoration(labelText: 'Observaciones'),
                 ),
                 TextFormField(
                   controller: encargadoController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       labelText: 'Encargado del dispositivo'),
                 ),
                 TextFormField(
                   controller: codigoActFijosDispositivosController,
                   decoration:
-                      const InputDecoration(labelText: 'Codigo Act Fijos'),
+                      InputDecoration(labelText: 'Codigo Act Fijos'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Ingrese la IP';
@@ -119,7 +119,7 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
                 ),
                 TextFormField(
                   controller: custodioController,
-                  decoration: const InputDecoration(labelText: 'Custodio'),
+                  decoration: InputDecoration(labelText: 'Custodio'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Ingrese el Custodio';
@@ -127,7 +127,7 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 Center(
                   child: ElevatedButton(
                     onPressed: () async {
@@ -156,13 +156,13 @@ class _AgregarDispositivoScreenState extends State<AgregarDispositivoScreen> {
 
                         // Mostrar mensaje de éxito y regresar a la pantalla anterior
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                          SnackBar(
                               content: Text('Dispositivo guardado con éxito')),
                         );
                         Navigator.pop(context);
                       }
                     },
-                    child: const Text('Guardar'),
+                    child: Text('Guardar'),
                   ),
                 ),
               ],
